@@ -11,6 +11,8 @@
   --border: #30363d;
   --text: #c9d1d9;
   --dim: #8b949e;
+  --up: #f85149;
+  --down: #3fb950;
   --green: #3fb950;
   --red: #f85149;
   --accent: #58a6ff;
@@ -21,7 +23,7 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   background: var(--bg); color: var(--text);
-  max-width: 768px; margin: 0 auto; padding: 12px;
+  max-width: 1100px; margin: 0 auto; padding: 16px;
   -webkit-text-size-adjust: 100%;
 }
 .header {
@@ -44,8 +46,8 @@ body {
 }
 .ticker-item .name { font-size: 0.65rem; color: var(--dim); }
 .ticker-item .val { font-size: 1rem; font-weight: 700; }
-.ticker-item.up .val { color: var(--green); }
-.ticker-item.down .val { color: var(--red); }
+.ticker-item.up .val { color: var(--up); }
+.ticker-item.down .val { color: var(--down); }
 
 /* Summary cards */
 .summary {
@@ -58,8 +60,8 @@ body {
 .sum-card .label { font-size: 0.7rem; color: var(--dim); margin-bottom: 4px; }
 .sum-card .value { font-size: 1.15rem; font-weight: 700; }
 .sum-card .sub { font-size: 0.7rem; margin-top: 2px; }
-.sum-card.profit .value { color: var(--green); }
-.sum-card.loss .value { color: var(--red); }
+.sum-card.profit .value { color: var(--up); }
+.sum-card.loss .value { color: var(--down); }
 
 /* Section title */
 .sec-title {
@@ -85,8 +87,8 @@ body {
 .stock-card .right { text-align: right; min-width: 70px; flex-shrink: 0; }
 .stock-card .pnl { font-size: 0.95rem; font-weight: 700; }
 .stock-card .pnl-pct { font-size: 0.75rem; }
-.stock-card.up .pnl, .stock-card.up .pnl-pct { color: var(--green); }
-.stock-card.down .pnl, .stock-card.down .pnl-pct { color: var(--red); }
+.stock-card.up .pnl, .stock-card.up .pnl-pct { color: var(--up); }
+.stock-card.down .pnl, .stock-card.down .pnl-pct { color: var(--down); }
 .stock-card .mkt-val { font-size: 0.65rem; color: var(--dim); margin-top: 2px; }
 
 /* News card */
@@ -112,10 +114,9 @@ body {
 .news-card .affected span { color: var(--gold); }
 
 /* Sentiment indicators */
-.sentiment-dot { display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px; }
-.sentiment-positive { color: var(--green); }
+.sentiment-positive { color: var(--up); }
 .sentiment-warning { color: var(--gold); }
-.sentiment-negative { color: var(--red); }
+.sentiment-negative { color: var(--down); }
 
 /* Market brief */
 .brief-item {
@@ -124,8 +125,8 @@ body {
 }
 .brief-item .b-label { font-size: 0.78rem; }
 .brief-item .b-val { font-size: 0.78rem; font-weight: 600; }
-.brief-item .b-val.up { color: var(--green); }
-.brief-item .b-val.down { color: var(--red); }
+.brief-item .b-val.up { color: var(--up); }
+.brief-item .b-val.down { color: var(--down); }
 
 /* Notes */
 .note-area {
@@ -195,10 +196,10 @@ body {
 }
 
 /* Price flash animations */
-@keyframes flashGreen { 0%{color:#7ee787;} 50%{color:var(--green);} 100%{color:var(--text);} }
-@keyframes flashRed   { 0%{color:#ff7b72;} 50%{color:var(--red);} 100%{color:var(--text);} }
-.price-flash-up   { animation: flashGreen 0.8s ease; }
-.price-flash-down { animation: flashRed 0.8s ease; }
+@keyframes flashUp   { 0%{color:#ff7b72;} 50%{color:var(--up);} 100%{color:var(--text);} }
+@keyframes flashDown { 0%{color:#7ee787;} 50%{color:var(--down);} 100%{color:var(--text);} }
+.price-flash-up   { animation: flashUp 0.8s ease; }
+.price-flash-down { animation: flashDown 0.8s ease; }
 
 /* Fund manager & framework annotations */
 .fm-note {
@@ -316,7 +317,7 @@ body {
 }
 .lu-tag:hover { border-color: var(--accent); background: rgba(88,166,255,0.15); }
 .lu-tag.match { border-color: var(--gold); background: rgba(210,153,29,0.1); }
-.lu-tag.mine { border-color: var(--green); background: rgba(63,185,80,0.1); }
+.lu-tag.mine { border-color: var(--up); background: rgba(248,81,73,0.1); }
 
 .lu-flow-item {
   display: flex; justify-content: space-between; align-items: center;
@@ -378,8 +379,8 @@ body {
 .trade-row input:focus { border-color: var(--accent); outline: none; }
 .trade-actions { display: flex; gap: 8px; margin-top: 14px; }
 .trade-actions .btn { flex: 1; padding: 10px; font-size: 0.8rem; text-align: center; }
-.btn.buy  { background: var(--green); color: #000; }
-.btn.sell { background: var(--red); color: #fff; }
+.btn.buy  { background: var(--up); color: #fff; }
+.btn.sell { background: var(--down); color: #000; }
 .btn.warn { background: var(--gold); color: #000; }
 .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
@@ -398,8 +399,8 @@ body {
   padding: 7px 10px; border-bottom: 1px solid rgba(48,54,61,0.3); font-size: 0.7rem;
 }
 .trade-log-item .tl-act { font-weight: 700; min-width: 32px; }
-.trade-log-item .tl-act.buy  { color: var(--green); }
-.trade-log-item .tl-act.sell { color: var(--red); }
+.trade-log-item .tl-act.buy  { color: var(--up); }
+.trade-log-item .tl-act.sell { color: var(--down); }
 
 /* Stock card trade buttons */
 .stock-actions {
@@ -409,8 +410,8 @@ body {
   padding: 3px 8px; font-size: 0.6rem; border-radius: 4px; border: none;
   cursor: pointer; font-weight: 600;
 }
-.btn-mini.add  { background: rgba(63,185,80,0.2); color: var(--green); }
-.btn-mini.cut  { background: rgba(248,81,73,0.2); color: var(--red); }
+.btn-mini.add  { background: rgba(248,81,73,0.2); color: var(--up); }
+.btn-mini.cut  { background: rgba(63,185,80,0.2); color: var(--down); }
 .btn-mini.close{ background: rgba(248,81,73,0.3); color: #ff7b72; }
 .btn-mini.edit { background: rgba(139,148,158,0.2); color: var(--dim); }
 </style>
@@ -765,27 +766,41 @@ function applyLivePrices() {
 }
 
 function updateIndices() {
-  const map = {
-    '000001': { el: 'idxSH', chg: 'idxSHChg' },
-    '399001': { el: 'idxSZ', chg: 'idxSZChg' },
-    '000688': { el: 'idxKC', chg: 'idxKCChg' },
-    '399006': { el: 'idxGEM', chg: 'idxGEMChg' }
+  // Priority: live data → news.json marketBrief → fallback defaults
+  const briefData = newsData?.marketBrief || {};
+  const defaults = {
+    'sh': { val: briefData.shIndex || 4027.26, chg: briefData.shChange || '-2.26%', el:'idxSH', chgEl:'idxSHChg' },
+    'sz': { val: briefData.szIndex || 15782.22, chg: briefData.szChange || '-3.44%', el:'idxSZ', chgEl:'idxSZChg' },
+    'kc': { val: briefData.kc50 || 2032.28, chg: briefData.kc50Change || '-1.65%', el:'idxKC', chgEl:'idxKCChg' },
+    'gem':{ val: briefData.gem || 4194.21, chg: briefData.gemChange || '-4.07%', el:'idxGEM', chgEl:'idxGEMChg' }
   };
+  const map = {
+    '000001': { el:'idxSH',chg:'idxSHChg',dk:'sh'},
+    '399001': { el:'idxSZ',chg:'idxSZChg',dk:'sz'},
+    '000688': { el:'idxKC',chg:'idxKCChg',dk:'kc'},
+    '399006': { el:'idxGEM',chg:'idxGEMChg',dk:'gem'}
+  };
+
   Object.entries(map).forEach(([code, ids]) => {
     const q = liveQuotes[code];
-    if (!q || !q.price) return;
+    const d = defaults[ids.dk];
     const el = document.getElementById(ids.el);
     const chgEl = document.getElementById(ids.chg);
-    if (el) el.textContent = q.price.toFixed(2);
+    if (!el) return;
+
+    const price = (q && q.price > 0) ? q.price : d.val;
+    const changeStr = (q && q.price > 0) ? ((q.changePct >= 0 ? '+' : '') + q.changePct.toFixed(2) + '%') : d.chg;
+    const isUp = (q && q.price > 0) ? (q.changePct >= 0) : !String(d.chg).startsWith('-');
+
+    el.textContent = typeof price === 'number' ? price.toFixed(2) : price;
     if (chgEl) {
-      const sign = q.changePct >= 0 ? '+' : '';
-      chgEl.textContent = `${sign}${q.changePct.toFixed(2)}%`;
-      chgEl.style.color = q.changePct >= 0 ? 'var(--green)' : 'var(--red)';
+      chgEl.textContent = changeStr;
+      chgEl.style.color = isUp ? 'var(--up)' : 'var(--down)';
     }
-    const tickerItem = el?.closest('.ticker-item');
+    const tickerItem = el.closest('.ticker-item');
     if (tickerItem) {
-      tickerItem.classList.remove('up', 'down');
-      tickerItem.classList.add(q.changePct >= 0 ? 'up' : 'down');
+      tickerItem.classList.remove('up','down');
+      tickerItem.classList.add(isUp ? 'up' : 'down');
     }
   });
 }
@@ -821,11 +836,11 @@ function updateSummaryCards() {
   if (countEl) countEl.textContent = portfolioStocks.length + '只持仓';
   if (pnlEl) {
     pnlEl.textContent = (totalPnl >= 0 ? '+' : '') + totalPnl.toFixed(0);
-    pnlEl.style.color = totalPnl >= 0 ? 'var(--green)' : 'var(--red)';
+    pnlEl.style.color = totalPnl >= 0 ? 'var(--up)' : 'var(--down)';
   }
   if (pnlPctEl) {
     pnlPctEl.textContent = (totalPnlPct >= 0 ? '+' : '') + totalPnlPct.toFixed(2) + '%';
-    pnlPctEl.style.color = totalPnlPct >= 0 ? 'var(--green)' : 'var(--red)';
+    pnlPctEl.style.color = totalPnlPct >= 0 ? 'var(--up)' : 'var(--down)';
   }
 
   const todayEl = document.getElementById('sumToday');
@@ -841,9 +856,9 @@ function updateSummaryCards() {
     });
     if (todayCost > 0) {
       todayEl.textContent = (todayPnl >= 0 ? '+' : '') + todayPnl.toFixed(0);
-      todayEl.style.color = todayPnl >= 0 ? 'var(--green)' : 'var(--red)';
+      todayEl.style.color = todayPnl >= 0 ? 'var(--up)' : 'var(--down)';
       todayPctEl.textContent = (todayPnl/todayCost*100 >= 0 ? '+' : '') + (todayPnl/todayCost*100).toFixed(2) + '%';
-      todayPctEl.style.color = todayPnl >= 0 ? 'var(--green)' : 'var(--red)';
+      todayPctEl.style.color = todayPnl >= 0 ? 'var(--up)' : 'var(--down)';
     }
   }
 }
@@ -891,6 +906,7 @@ function renderAllNews() {
   renderFundWatch();
   renderBrief();
   updateNewsTimestamp();
+  updateIndices();
 }
 
 function updateNewsTimestamp() {
@@ -967,7 +983,7 @@ function renderFundWatch() {
     container.innerHTML = '<div class="empty-state">暂无基金经理动态</div>'; return;
   }
   container.innerHTML = newsData.fundManagerWatch.map(f => {
-    const signalColor = f.signal.includes('✅') ? 'var(--green)' : f.signal.includes('🔥') ? 'var(--gold)' : f.signal.includes('⚠') ? 'var(--red)' : 'var(--dim)';
+    const signalColor = f.signal.includes('✅') ? 'var(--up)' : f.signal.includes('🔥') ? 'var(--gold)' : f.signal.includes('⚠') ? 'var(--down)' : 'var(--dim)';
     return `<div class="news-card" style="padding:10px 14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <strong style="font-size:0.8rem;">👔 ${f.manager}</strong>
@@ -1383,7 +1399,7 @@ function showLUDetail(name, code, reason, sector) {
     recHTML = matches.map(m => {
       const isHeld = heldCodes.includes(m.code);
       const isWatch = watchCodes.includes(m.code);
-      return `<div class="match-card" style="border-left:3px solid ${isHeld?'var(--green)':isWatch?'var(--gold)':'var(--border)'};">
+      return `<div class="match-card" style="border-left:3px solid ${isHeld?'var(--up)':isWatch?'var(--gold)':'var(--border)'};">
         <div class="m-header"><span class="m-stock">${m.name} (${m.code}) ${isHeld?'🟢持仓':isWatch?'👀关注':''}</span><span class="m-hist">${m.date} 涨停</span></div>
         <div class="m-reason">📌 ${m.reason}</div>
         <div class="m-sim">🏷 ${m.catalyst.map(c => '#'+c).join(' ')}</div>
@@ -1514,7 +1530,7 @@ function renderClosed() {
         <div style="font-size:0.7rem;padding:6px 10px;color:var(--dim);border-bottom:1px solid rgba(48,54,61,0.2);display:flex;justify-content:space-between;">
           <span>${cp.name} ${cp.code}</span>
           <span>${cp.shares}股 | 成本${cp.cost.toFixed(2)}</span>
-          <span style="color:${cp.realizedPnl>=0?'var(--green)':'var(--red)'};">${cp.realizedPnl>=0?'+':''}${cp.realizedPnl.toFixed(0)}</span>
+          <span style="color:${cp.realizedPnl>=0?'var(--up)':'var(--down)'};">${cp.realizedPnl>=0?'+':''}${cp.realizedPnl.toFixed(0)}</span>
           <span style="font-size:0.6rem;">${cp.closeDate?.slice(0,10)||''}</span>
         </div>
       `).join('')}
@@ -1769,7 +1785,7 @@ function renderScores() {
   document.getElementById('scoreCount').textContent = results.length + '只';
   document.getElementById('scoreRanking').innerHTML = results.map((r, i) => {
     const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
-    const barColor = r.weighted >= 70 ? 'var(--green)' : r.weighted >= 50 ? 'var(--gold)' : 'var(--red)';
+    const barColor = r.weighted >= 70 ? 'var(--up)' : r.weighted >= 50 ? 'var(--gold)' : 'var(--down)';
     const tag = r.stock.isWatch ? ' 👀关注' : (portfolioStocks.find(s => s.code === r.stock.code) ? ' 🟢持仓' : '');
     return `<div class="match-card" style="cursor:pointer;" onclick="showScoreDetail('${r.stock.code}')">
       <div class="m-header"><span class="m-stock">${medal} ${r.stock.name} <span style="font-size:0.6rem;color:var(--dim);">${r.stock.code}</span>${tag}</span>
@@ -1799,9 +1815,9 @@ function showScoreDetail(code) {
   };
   detail.innerHTML = `
     <h3>🔬 ${r.stock.name} (${r.stock.code}) 评分拆解</h3>
-    <div style="font-size:1.4rem;font-weight:700;text-align:center;margin:12px 0;color:${r.weighted>=70?'var(--green)':r.weighted>=50?'var(--gold)':'var(--red)'};">${r.weighted} 分</div>
+    <div style="font-size:1.4rem;font-weight:700;text-align:center;margin:12px 0;color:${r.weighted>=70?'var(--up)':r.weighted>=50?'var(--gold)':'var(--down)'};">${r.weighted} 分</div>
     ${Object.entries(r.scores).map(([k,v]) => `
-      <div class="brief-item"><span class="b-label">${reasons[k][0]}</span><span class="b-val" style="color:${v>=70?'var(--green)':v>=50?'var(--gold)':'var(--red)'};">${v}/100</span></div>
+      <div class="brief-item"><span class="b-label">${reasons[k][0]}</span><span class="b-val" style="color:${v>=70?'var(--up)':v>=50?'var(--gold)':'var(--down)'};">${v}/100</span></div>
       <div style="font-size:0.65rem;color:var(--dim);margin-bottom:6px;">${reasons[k][1]}</div>
     `).join('')}
     <div class="trade-actions">
