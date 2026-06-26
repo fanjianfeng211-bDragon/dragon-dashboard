@@ -447,6 +447,15 @@ body {
 .cmd-hint span { cursor: pointer; }
 .cmd-hint span:hover { color: var(--accent); }
 
+/* Verification */
+.verify-badge { display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.65rem;font-weight:700; }
+.verify-correct { background:#dafbe1;color:#1a7f37; }
+.verify-wrong   { background:#ffebe9;color:#cf222e; }
+.verify-pending { background:#f3f4f6;color:#656d76; }
+.v-bar-wrap { height:6px;background:var(--border);border-radius:3px;overflow:hidden;flex:1;min-width:50px; }
+.v-bar-fill { height:100%;border-radius:3px;transition:width 0.3s; }
+.rule-rank-item { display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);font-size:0.7rem; }
+
 /* Toast */
 .toast {
   position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
@@ -495,6 +504,7 @@ body {
   <div class="nav-tab" onclick="switchTab('notes')">📝 笔记</div>
   <div class="nav-tab" onclick="switchTab('limitup')">🔥 涨停</div>
   <div class="nav-tab" onclick="switchTab('score')">🍎 选股</div>
+  <div class="nav-tab" onclick="switchTab('verify')">🎯 验证</div>
 </div>
 
 <!-- ===== TAB 0: OPERATIONS ===== -->
@@ -687,6 +697,35 @@ body {
 </div>
 
 <!-- ===== TAB: SCORE ===== -->
+<!-- ===== TAB: VERIFICATION ===== -->
+<div class="tab-content" id="tab-verify">
+
+<div class="sec-title">🎯 推荐验证 · 自学习系统</div>
+<div style="font-size:0.7rem;color:var(--dim);margin-bottom:8px;">
+  每日信号推荐 → 次日股价验证 → 规则准确率统计 → 权重自优化
+</div>
+
+<div class="summary" style="grid-template-columns: 1fr 1fr 1fr;" id="verifySummary">
+  <div class="sum-card"><div class="label">总准确率</div><div class="value" id="vAccuracy">—</div><div class="sub" id="vTotal">0条已验证</div></div>
+  <div class="sum-card"><div class="label">今日推荐</div><div class="value" id="vToday">0</div><div class="sub">条待验证</div></div>
+  <div class="sum-card"><div class="label">最优规则</div><div class="value" style="font-size:0.8rem;" id="vBestRule">—</div><div class="sub" id="vBestRate"></div></div>
+</div>
+
+<div class="sec-title">📊 规则准确率排名</div>
+<div id="ruleRanking" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
+
+<div style="display:flex;gap:8px;margin:10px 0;">
+  <button class="btn save" onclick="runVerification()">🔍 验证未决推荐</button>
+  <button class="btn" onclick="optimizeRules()">⚡ 自动优化权重</button>
+  <button class="btn" style="background:var(--red);color:#fff;" onclick="clearSignalLog()">🗑 清空日志</button>
+</div>
+
+<div class="sec-title">📋 推荐记录</div>
+<div id="signalLogList" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
+<div class="empty-state" id="signalLogEmpty">暂无推荐记录，信号引擎触发后自动记录</div>
+
+</div>
+
 <div class="tab-content" id="tab-score">
 
 <div class="sec-title">🍎 多因子选股评分</div>
@@ -877,6 +916,11 @@ async function refreshLiveData() {
   updateIndices();
   updateSummaryCards();
   updateTimestamp();
+  // Auto-verify pending recommendations with fresh prices
+  const pending = signalLog.filter(e => !e.verified);
+  if (pending.length > 0 && Object.keys(liveQuotes).length > 0) {
+    runVerification();
+  }
 }
 
 function updateTimestamp() {
@@ -1227,6 +1271,7 @@ function evaluateAll() {
 
 function renderOps() {
   const results = evaluateAll();
+  logSignals(results);  // Auto-log for verification
   const container = document.getElementById('opsList');
   const empty = document.getElementById('opsEmpty');
   const countEl = document.getElementById('signalCount');
@@ -1299,7 +1344,7 @@ function refreshAll() { renderOps(); renderRules(); }
 // ============================================================
 //  TAB SWITCHING
 // ============================================================
-const tabMap = { ops:1, portfolio:2, news:3, brief:4, notes:5, limitup:6, score:7 };
+const tabMap = { ops:1, portfolio:2, news:3, brief:4, notes:5, limitup:6, score:7, verify:8 };
 let switchTab = function(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1310,6 +1355,7 @@ let switchTab = function(name) {
   if (name === 'score') { scoreAll(); renderScores(); }
   if (name === 'news') { if (newsData) renderAllNews(); else loadNews(); }
   if (name === 'brief') { if (newsData) renderBrief(); }
+  if (name === 'verify') { renderVerification(); }
 };
 
 // ============================================================
@@ -1917,6 +1963,214 @@ document.getElementById('dateDisplay').textContent =
 updateTimestamp();
 
 // ============================================================
+//  VERIFICATION ENGINE — 推荐验证 + 自学习 v5.0
+// ============================================================
+
+const SIGNAL_LOG_KEY = 'dragon_signal_log';
+const RULE_STATS_KEY = 'dragon_rule_stats';
+
+let signalLog = [];
+let ruleStats = {};
+
+function loadSignalLog() {
+  try { signalLog = JSON.parse(localStorage.getItem(SIGNAL_LOG_KEY) || '[]'); }
+  catch(e) { signalLog = []; }
+  try { ruleStats = JSON.parse(localStorage.getItem(RULE_STATS_KEY) || '{}'); }
+  catch(e) { ruleStats = {}; }
+}
+
+function saveSignalLog() {
+  localStorage.setItem(SIGNAL_LOG_KEY, JSON.stringify(signalLog));
+  localStorage.setItem(RULE_STATS_KEY, JSON.stringify(ruleStats));
+}
+
+// Auto-log recommendations from signal engine
+function logSignals(results) {
+  const today = new Date().toISOString().slice(0,10);
+  results.forEach(r => {
+    const id = `${today}_${r.stock.code}_${r.signal}`;
+    // Avoid duplicate logging same stock+signal same day
+    if (signalLog.find(e => e.date === today && e.stockCode === r.stock.code && e.signal === r.signal)) return;
+    signalLog.push({
+      id, date: today, stockCode: r.stock.code, stockName: r.stock.name,
+      signal: r.signal, urgency: r.urgency, reason: r.reason, action: r.action,
+      ruleName: r.rule.name, ruleId: r.rule.id,
+      priceAtSignal: r.stock.price,
+      verified: false, verifyDate: null, nextDayPrice: null,
+      priceChange: null, priceChangePct: null, correct: null, score: 0
+    });
+  });
+  if (results.length > 0) saveSignalLog();
+}
+
+// Verify pending recommendations against current prices
+function runVerification() {
+  if (signalLog.length === 0) { toast('暂无推荐记录', 'info'); return; }
+
+  let verifiedCount = 0;
+  const today = new Date().toISOString().slice(0,10);
+
+  signalLog.forEach(entry => {
+    if (entry.verified || entry.date === today) return; // Skip already verified or today's
+
+    // Find current price for this stock
+    const st = portfolioStocks.find(s => s.code === entry.stockCode);
+    const liveQ = liveQuotes[entry.stockCode];
+    const currentPrice = (liveQ && liveQ.price > 0) ? liveQ.price : (st ? st.price : null);
+
+    if (!currentPrice || currentPrice <= 0) return;
+
+    entry.verified = true;
+    entry.verifyDate = today;
+    entry.nextDayPrice = currentPrice;
+    entry.priceChange = currentPrice - entry.priceAtSignal;
+    entry.priceChangePct = entry.priceAtSignal > 0 ? (currentPrice - entry.priceAtSignal) / entry.priceAtSignal * 100 : 0;
+
+    // Score logic
+    const chg = entry.priceChangePct;
+    let correct, score;
+    switch (entry.signal) {
+      case 'strong_buy': correct = chg > 0.5;  score = correct ? 2 : (chg < -0.5 ? -2 : 0); break;
+      case 'buy':        correct = chg > 0;    score = correct ? 1 : (chg < 0 ? -1 : 0); break;
+      case 'hold':       correct = Math.abs(chg) <= 1; score = correct ? 1 : -1; break;
+      case 'sell':       correct = chg < 0;    score = correct ? 1 : (chg > 0 ? -1 : 0); break;
+      case 'strong_sell':correct = chg < -0.5; score = correct ? 2 : (chg > 0.5 ? -2 : 0); break;
+      case 'alert':      correct = chg < -0.3; score = correct ? 1 : (chg > 0.3 ? -1 : 0); break;
+      default:           correct = null; score = 0;
+    }
+    entry.correct = correct;
+    entry.score = score;
+    verifiedCount++;
+
+    // Update rule stats
+    if (!ruleStats[entry.ruleId]) ruleStats[entry.ruleId] = { correct: 0, total: 0 };
+    ruleStats[entry.ruleId].total++;
+    if (correct) ruleStats[entry.ruleId].correct++;
+  });
+
+  if (verifiedCount > 0) {
+    saveSignalLog();
+    renderVerification();
+    toast(`✅ 已验证 ${verifiedCount} 条推荐`, 'ok');
+  } else {
+    toast('没有需要验证的推荐', 'info');
+  }
+}
+
+// Render verification tab
+function renderVerification() {
+  loadSignalLog();
+  const today = new Date().toISOString().slice(0,10);
+
+  // Summary
+  const verified = signalLog.filter(e => e.verified);
+  const totalCorrect = verified.filter(e => e.correct === true).length;
+  const totalVerified = verified.length;
+  const accuracy = totalVerified > 0 ? (totalCorrect / totalVerified * 100).toFixed(1) : '—';
+  const todayRecs = signalLog.filter(e => e.date === today).length;
+  const pending = signalLog.filter(e => !e.verified).length;
+
+  document.getElementById('vAccuracy').textContent = accuracy === '—' ? '—' : accuracy + '%';
+  document.getElementById('vAccuracy').style.color = parseFloat(accuracy) >= 60 ? 'var(--up)' : parseFloat(accuracy) >= 40 ? 'var(--gold)' : 'var(--down)';
+  document.getElementById('vTotal').textContent = totalVerified + '条已验证' + (pending > 0 ? ' | ' + pending + '条待验证' : '');
+  document.getElementById('vToday').textContent = todayRecs;
+
+  // Best rule
+  let bestRule = null, bestRate = 0;
+  Object.entries(ruleStats).forEach(([id, s]) => {
+    const r = s.total > 1 ? s.correct / s.total : 0;
+    if (r > bestRate && s.total >= 2) { bestRate = r; bestRule = id; }
+  });
+  const bestRuleObj = rules.find(r => r.id === bestRule);
+  document.getElementById('vBestRule').textContent = bestRuleObj ? bestRuleObj.name : '—';
+  document.getElementById('vBestRate').textContent = bestRule ? (bestRate*100).toFixed(0) + '% 准确率' : '数据不足';
+
+  // Rule ranking
+  const ranking = document.getElementById('ruleRanking');
+  const ruleEntries = rules.map(r => {
+    const s = ruleStats[r.id];
+    const acc = s && s.total > 0 ? s.correct / s.total : null;
+    return { rule: r, stats: s, accuracy: acc };
+  }).sort((a,b) => (b.accuracy ?? -1) - (a.accuracy ?? -1));
+
+  ranking.innerHTML = ruleEntries.map(({rule, stats, accuracy}) => {
+    const accStr = accuracy !== null ? (accuracy * 100).toFixed(0) + '%' : '—';
+    const barW = accuracy !== null ? Math.max(5, accuracy * 100) : 0;
+    const barColor = accuracy !== null ? (accuracy >= 0.6 ? 'var(--up)' : accuracy >= 0.4 ? 'var(--gold)' : 'var(--down)') : 'var(--border)';
+    return `<div class="rule-rank-item">
+      <span style="flex:0 0 100px;font-weight:600;font-size:0.68rem;white-space:nowrap;">${rule.name}</span>
+      <div class="v-bar-wrap"><div class="v-bar-fill" style="width:${barW}%;background:${barColor};"></div></div>
+      <span style="flex:0 0 40px;text-align:right;font-weight:700;font-size:0.7rem;color:${barColor};">${accStr}</span>
+      <span style="flex:0 0 50px;text-align:right;font-size:0.6rem;color:var(--dim);">${stats ? stats.correct+'/'+stats.total : '0/0'}</span>
+    </div>`;
+  }).join('');
+
+  // Signal log
+  const logList = document.getElementById('signalLogList');
+  const logEmpty = document.getElementById('signalLogEmpty');
+  if (signalLog.length === 0) {
+    logList.innerHTML = '';
+    logEmpty.style.display = 'block';
+  } else {
+    logEmpty.style.display = 'none';
+    logList.innerHTML = signalLog.slice(0, 50).reverse().map(e => {
+      let badge;
+      if (!e.verified) {
+        badge = '<span class="verify-badge verify-pending">⏳ 待验证</span>';
+      } else if (e.correct === true) {
+        badge = `<span class="verify-badge verify-correct">✅ 正确 +${e.score}</span>`;
+      } else {
+        badge = `<span class="verify-badge verify-wrong">❌ 错误 ${e.score}</span>`;
+      }
+      return `<div class="rule-rank-item">
+        <span style="flex:0 0 65px;font-size:0.6rem;color:var(--dim);">${e.date.slice(5)}</span>
+        <span style="flex:0 0 65px;font-weight:600;font-size:0.7rem;">${e.stockName}</span>
+        <span class="signal-badge signal-${e.signal}" style="font-size:0.55rem;padding:1px 6px;">${SIGNAL_LABELS[e.signal]||e.signal}</span>
+        <span style="flex:1;font-size:0.63rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 6px;">${e.reason}</span>
+        ${badge}
+        ${e.verified ? `<span style="font-size:0.55rem;color:var(--dim);">${e.priceChangePct>=0?'+':''}${e.priceChangePct?.toFixed(1)||'?'}%</span>` : ''}
+      </div>`;
+    }).join('');
+  }
+}
+
+// Self-optimize rule weights based on accuracy
+function optimizeRules() {
+  let optimized = 0;
+  rules.forEach(rule => {
+    const s = ruleStats[rule.id];
+    if (!s || s.total < 3) return; // Need minimum data
+    const acc = s.correct / s.total;
+    if (acc < 0.4 && rule.priority > 10) {
+      rule.priority = Math.max(10, rule.priority - 10);
+      optimized++;
+    } else if (acc > 0.7 && rule.priority < 100) {
+      rule.priority = Math.min(100, rule.priority + 5);
+      optimized++;
+    }
+  });
+  if (optimized > 0) {
+    refreshAll();
+    toast(`⚡ 已优化 ${optimized} 条规则权重`, 'ok');
+  } else {
+    toast('规则权重无需调整（数据不足或准确率正常）', 'info');
+  }
+}
+
+function clearSignalLog() {
+  if (confirm('确定清空所有推荐日志和统计数据？此操作不可恢复。')) {
+    signalLog = []; ruleStats = {};
+    localStorage.removeItem(SIGNAL_LOG_KEY);
+    localStorage.removeItem(RULE_STATS_KEY);
+    renderVerification();
+    toast('🗑 日志已清空', 'ok');
+  }
+}
+
+// Initialize on load
+loadSignalLog();
+
+// ============================================================
 //  COMMAND PARSER — 网页命令栏 Ctrl+K
 // ============================================================
 
@@ -2167,6 +2421,9 @@ window.clearNotes = clearNotes;
 window.saveChecklist = saveChecklist;
 window.clearChecklist = clearChecklist;
 window.refreshLiveData = refreshLiveData;
+window.runVerification = runVerification;
+window.optimizeRules = optimizeRules;
+window.clearSignalLog = clearSignalLog;
 </script>
 </body>
 </html>
