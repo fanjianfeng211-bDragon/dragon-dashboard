@@ -1,0 +1,258 @@
+{
+  "updated": "2026-06-25T15:30:00+08:00",
+  "curatedBy": "Claude · 基金经理情报库 · 产业链13章框架",
+  "disclaimer": "资讯仅供参考，不构成投资建议。数据来源：公开财经媒体。",
+
+  "marketBrief": {
+    "shIndex": 4120.28,
+    "shChange": "+0.23%",
+    "szIndex": 16344.08,
+    "szChange": "+1.82%",
+    "kc50": 2066.33,
+    "kc50Change": "+3.87%",
+    "gem": 4371.99,
+    "gemChange": "+2.84%",
+    "volume": "3.59万亿",
+    "volumeNote": "较昨日放量3100亿",
+    "upDown": "1230 / 4200",
+    "upDownNote": "黄白线极度分化，权重拉指数",
+    "leadingSector": ["存储芯片", "PCB", "券商", "通信"],
+    "laggingSector": ["石油石化", "贵金属", "煤炭", "钢铁"]
+  },
+
+  "topNews": [
+    {
+      "tag": "芯片",
+      "subTag": "基金经理",
+      "title": "美光财报炸裂：营收+指引远超预期，盘后暴涨18%，存储供不应求至2027",
+      "summary": "美光Q2财报全面超预期，已与超大客户签下4项长期锁价协议。摩根大通、高盛集体上调目标价至2000美元。存储芯片供需紧张延续至2027年，AI算力驱动HBM和NAND需求激增。",
+      "affectedStocks": ["沪电股份", "兴森科技"],
+      "fundManagerAngle": "张坤Q1建仓ASML+SK海力士 → 半导体最上游（设备+存储原厂）是最大公约数。存储PCB/IC载板是确定性受益环节。",
+      "frameworkLink": "半导体材料框架·存储PCB+封装基板·第6章",
+      "source": "东方财富/金融界",
+      "time": "2026-06-25 09:30"
+    },
+    {
+      "tag": "PCB",
+      "subTag": "产业链",
+      "title": "PCB板块主力净流入107.77亿！东山+7.26% 沪电+8.12% 兴森+6.57%",
+      "summary": "6/25 PCB概念板块集体爆发，东山精密主力净流入16.19亿居首，沪电14.17亿紧随其后。20家A股PCB公司年内发布扩产公告，总投资超800亿。大摩测算AI光模块PCB市场2025年6.2亿→2028年37.7亿美元。",
+      "affectedStocks": ["东山精密", "沪电股份", "兴森科技"],
+      "fundManagerAngle": "傅鹏博Q1大幅加仓PCB方向（沪电股份），但减持东山精密 → PCB板块内有分化，沪电>东山。科技基金Top业绩（年内>80%）重仓沪电。",
+      "frameworkLink": "PCB产业链·存储PCB+AI服务器PCB·第5-6章",
+      "source": "网易财经/证券时报",
+      "time": "2026-06-25 15:00"
+    },
+    {
+      "tag": "小金属",
+      "subTag": "政策",
+      "title": "《矿产资源法实施条例》6/15施行，36种矿产纳入战略目录，稀土/钨/锗/镓供给收缩",
+      "summary": "新增采矿权审批统一上收至自然资源部，出口需多部门联合审批。小金属板块批量涨停：盛和资源、厦门钨业、有研新材。钽锭半年涨158%，铟价涨约60%，锡价涨超40%。氧化镝受益AI-MLCC，2027年新增镝需求1500吨。",
+      "affectedStocks": ["盛和资源", "株冶集团"],
+      "fundManagerAngle": "小金属不在核心基金视野，但战略矿产属性赋予政策溢价。盛和Q1净利+94%基本面支撑，但主力资金近期流出需警惕。",
+      "frameworkLink": "九大金属框架·铟专题·第9-13章",
+      "source": "新浪财经/东方财富",
+      "time": "2026-06-25 10:00"
+    },
+    {
+      "tag": "AI",
+      "subTag": "光通信",
+      "title": "英伟达硬怼SemiAnalysis：CPO交换机2026下半年量产交付不变，光通信产业链回稳",
+      "summary": "SemiAnalysis唱空CPO量产节奏（推迟至2028-2029），英伟达副总裁公开反驳：Spectrum-X CPO交换机按计划2026H2量产。国内长光华芯、仕佳光子、太辰光、胜宏科技加速CPO配套布局。",
+      "affectedStocks": ["东山精密", "兴森科技"],
+      "fundManagerAngle": "光模块是Q1分歧最大的赛道：傅鹏博加仓中际旭创 vs 谢治宇/冯明远减持。CPO产业化节奏是核心变量。",
+      "frameworkLink": "光芯片框架·硅光CPO路线·第3章",
+      "source": "东方财富/同花顺",
+      "time": "2026-06-25 11:00"
+    }
+  ],
+
+  "holdingNews": [
+    {
+      "stock": "沪电股份",
+      "code": "002463",
+      "emoji": "🔥",
+      "news": [
+        { "title": "PCB板块6/25主力净流入14.17亿，股价+8.12%收154.99", "sentiment": "positive" },
+        { "title": "年内176亿扩产计划，每月一投节奏，证券部称2027年前订单充足", "sentiment": "positive" },
+        { "title": "拟用1亿美元投资产业链上游企业，推进纵向一体化", "sentiment": "neutral" },
+        { "title": "公司自行提示风险：2027-2028产能集中释放后竞争加剧", "sentiment": "warning" },
+        { "title": "近一月融资净买入24.1亿，市场情绪极度亢奋", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "傅鹏博Q1大幅加仓PCB方向，科技Top基金重仓 → 最强共识票",
+      "frameworkNote": "PCB产业链第5章·AI服务器PCB·存储PCB",
+      "advice": "基本面最硬，但176亿激进扩产需警惕2027年后过剩。140以下补仓逻辑不变，现价154.99已远离补仓区。"
+    },
+    {
+      "stock": "东山精密",
+      "code": "002384",
+      "emoji": "⚡",
+      "news": [
+        { "title": "6/25主力净流入16.19亿，PCB板块居首，+7.26%收275.80", "sentiment": "positive" },
+        { "title": "拟10亿美元投建高端项目，达产期2026H2-2028", "sentiment": "positive" },
+        { "title": "年初至今股价涨超100%，Q1业绩翻倍", "sentiment": "positive" },
+        { "title": "傅鹏博Q1减持！光模块方向有分歧", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "傅鹏博Q1减持 → Q1分歧最大票。但科技基金仍重仓，分歧≠看空",
+      "frameworkNote": "光芯片框架·光通信·CPO配套·第3章",
+      "advice": "核心仓位设止损248不变。CPO产业化的最大受益者之一，但估值已高。"
+    },
+    {
+      "stock": "兴森科技",
+      "code": "002436",
+      "emoji": "🟢",
+      "news": [
+        { "title": "6/25 +6.57%收53.53，主力净流入6.31亿", "sentiment": "positive" },
+        { "title": "定增募资39亿，20亿投向珠海高阶mSAP基板（光模块基板）", "sentiment": "positive" },
+        { "title": "ESG评级从A降至BBB，在12家PCB同行排第6", "sentiment": "neutral" }
+      ],
+      "fundManagerNote": "不在核心基金视野，但IC载板+HBM配套逻辑清晰",
+      "frameworkNote": "PCB产业链第6章·IC载板·封装基板·HBM配套",
+      "advice": "继续持有，止盈位48不变。定增加码光模块基板方向正确。"
+    },
+    {
+      "stock": "盛和资源",
+      "code": "600392",
+      "emoji": "🚨",
+      "news": [
+        { "title": "稀土板块持续活跃，6/16、6/18两次涨停", "sentiment": "positive" },
+        { "title": "Q1归母净利3.27亿+94%，江阴加华稀土分离厂3月复产", "sentiment": "positive" },
+        { "title": "融资余额26.51亿处于90%分位，股东王全根仍在减持", "sentiment": "warning" },
+        { "title": "6/24主力净流出5.71亿，短期获利盘巨大", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "不在核心基金视野。稀土属政策驱动+涨价驱动，非业绩驱动",
+      "frameworkNote": "九大金属框架第10章·稀土/小金属",
+      "advice": "🚨优先处理：支撑30.50，反弹33减仓。主力+股东双双减持需高度重视。"
+    },
+    {
+      "stock": "株冶集团",
+      "code": "600961",
+      "emoji": "🔥",
+      "news": [
+        { "title": "6/24涨7.89%创60日新高，Q1净利+313%", "sentiment": "positive" },
+        { "title": "动态PE仅8.37，估值在小金属板块中偏低", "sentiment": "positive" },
+        { "title": "6/23主力净流出3.22亿，短期获利盘注意止盈", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "不在核心基金视野。锌+锑双品种，锑价上涨是核心驱动力",
+      "frameworkNote": "九大金属框架第9章·锑铟",
+      "advice": "设止盈34.50，破5日线就走。PE低≠不会跌，获利盘压力是关键。"
+    },
+    {
+      "stock": "盐湖股份",
+      "code": "000792",
+      "emoji": "🔥",
+      "news": [
+        { "title": "碳酸锂价格反弹，宜春矿复产延迟+青海盐湖季节性减产致供给扰动", "sentiment": "positive" },
+        { "title": "AI数据中心+储能需求上行，机构看好锂价底部支撑", "sentiment": "positive" }
+      ],
+      "fundManagerNote": "冯明远Q1清仓AI算力、重仓杀回锂电（恩捷/德方纳米/璞泰来） → 锂电反向下注。盐湖股份正好在这个方向！",
+      "frameworkNote": "新能源材料·锂矿",
+      "advice": "长烟确认右侧节点！冯明远反向加持，分时超级机构买盘。可考虑加仓。"
+    },
+    {
+      "stock": "风华高科",
+      "code": "000636",
+      "emoji": "⚠️",
+      "news": [
+        { "title": "MLCC涨价15-20%，缺货从AI扩散至手机/PC，预计延续至2027-2028", "sentiment": "positive" },
+        { "title": "6月中旬股价约64.30元，MLCC板块高标龙头", "sentiment": "positive" },
+        { "title": "PE高达278倍，市场给的是国产替代+涨价预期溢价", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "不在核心基金视野。MLCC属被动元件，非基金经理半导体主赛道",
+      "frameworkNote": "半导体材料框架第2章·被动元件",
+      "advice": "PE278倍极度透支，反弹到74+减仓策略不变。涨价预期已在股价中。"
+    },
+    {
+      "stock": "昊华科技",
+      "code": "600378",
+      "emoji": "🟡",
+      "news": [
+        { "title": "六氟化钨价格飙涨232%！钨矿一周涨25%，电子特气企业全面爆单", "sentiment": "positive" },
+        { "title": "六氟化钨产能600吨/年，六氟丁二烯1200吨/年全国第一", "sentiment": "positive" },
+        { "title": "6月中旬涨停，电子特气四龙头之一", "sentiment": "positive" },
+        { "title": "板块出现缩圈分化：高位股滞涨，跟风股负反馈", "sentiment": "warning" }
+      ],
+      "fundManagerNote": "不在核心基金视野。电子特气属半导体材料上游，间接受益AI算力",
+      "frameworkNote": "半导体材料框架第1章·电子特气",
+      "advice": "六氟化钨涨价逻辑强，但股价已反应。反弹70+减仓不变。"
+    },
+    {
+      "stock": "彩虹股份",
+      "code": "600707",
+      "emoji": "🟡",
+      "news": [
+        { "title": "玻璃基板板块活跃，归类高端玻璃基板三雄（沃格/凯盛/彩虹）", "sentiment": "neutral" },
+        { "title": "受益面板产业链景气回升+先进封装玻璃基板需求", "sentiment": "positive" }
+      ],
+      "fundManagerNote": "不在核心基金视野",
+      "frameworkNote": "半导体材料框架第4章·玻璃基板",
+      "advice": "鸡肋仓，可清掉集中资金。玻璃基板逻辑偏远期。"
+    }
+  ],
+
+  "aiChainNews": [
+    {
+      "title": "存储芯片：美光财报验证AI存储需求暴增3.2倍，HBM+NAND供不应求至2027",
+      "tags": ["存储", "AI"],
+      "affectedStocks": ["沪电股份", "兴森科技"],
+      "summary": "美光业绩炸裂+4项长期锁价协议，存储产业链确定性最强。国内存储PCB/IC载板/封装材料直接受益。"
+    },
+    {
+      "title": "CPO光通信：2026产业化元年确立，英伟达H2量产交付时间表不变",
+      "tags": ["光通信", "AI"],
+      "affectedStocks": ["东山精密", "兴森科技"],
+      "summary": "CPO/NPO/OIO技术路线清晰。国内长光华芯、仕佳光子、太辰光加速配套。东山精密的CPO光模块PCB是增量市场。"
+    },
+    {
+      "title": "高通发布数据中心CPU+收购AI软件公司Modular，剑指英伟达Intel",
+      "tags": ["AI", "芯片"],
+      "affectedStocks": [],
+      "summary": "高通2029年非手机营收指引上调至400亿美元。算力芯片竞争格局加剧，利好上游PCB/材料/封装。"
+    },
+    {
+      "title": "智谱开源GLM 5.2：1/6价格达到GPT 5.5编码性能，AI应用成本骤降",
+      "tags": ["AI"],
+      "affectedStocks": [],
+      "summary": "豆包日均Tokens 180万亿。企业AI应用加速，算力需求不降反升（Jevons悖论）。利好国产算力+存储产业链。"
+    },
+    {
+      "title": "20家PCB企业掀扩产潮：AI PCB总投资超800亿，2027-2028产能洪峰将至",
+      "tags": ["PCB", "风险"],
+      "affectedStocks": ["沪电股份", "东山精密", "兴森科技"],
+      "summary": "全行业激进扩产，2-3年后达产共振可能带来过剩压力。头部企业向上游材料延伸构建护城河。"
+    }
+  ],
+
+  "fundManagerWatch": [
+    {
+      "manager": "傅鹏博",
+      "action": "Q1大幅加仓PCB方向（沪电股份）+ 中际旭创",
+      "signal": "✅ PCB最强共识",
+      "impact": "利好沪电股份"
+    },
+    {
+      "manager": "张坤",
+      "action": "建仓ASML(+1536%) + SK海力士",
+      "signal": "设备+存储原厂 = 半导体最上游",
+      "impact": "存储PCB间接利好"
+    },
+    {
+      "manager": "冯明远",
+      "action": "清仓AI算力，重仓杀回锂电（恩捷/德方/璞泰来）",
+      "signal": "🔥 最大反向下注",
+      "impact": "利好盐湖股份（锂矿方向一致）"
+    },
+    {
+      "manager": "谢治宇",
+      "action": "减持光模块，加仓华海清科（半导体设备）",
+      "signal": "光通信有分歧",
+      "impact": "东山精密需警惕"
+    },
+    {
+      "manager": "林清源/李文宾",
+      "action": "共识AI电力+燃气轮机（订单排至2030）",
+      "signal": "AI缺电是增量方向",
+      "impact": "可关注思源电气/东方电气"
+    }
+  ]
+}
