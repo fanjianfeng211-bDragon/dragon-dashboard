@@ -6,18 +6,18 @@
 <title>龙神 · 交易仪表盘 v4.0</title>
 <style>
 :root {
-  --bg: #0d1117;
-  --card: #161b22;
-  --border: #30363d;
-  --text: #c9d1d9;
-  --dim: #8b949e;
-  --up: #f85149;
-  --down: #3fb950;
-  --green: #3fb950;
-  --red: #f85149;
-  --accent: #58a6ff;
-  --gold: #d2991d;
-  --purple: #a371f7;
+  --bg: #ffffff;
+  --card: #f6f8fa;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --dim: #656d76;
+  --up: #cf222e;
+  --down: #1a7f37;
+  --green: #1a7f37;
+  --red: #cf222e;
+  --accent: #0969da;
+  --gold: #9a6700;
+  --purple: #8250df;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -100,14 +100,14 @@ body {
   display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px;
   margin-bottom: 6px; font-weight: 700; margin-right: 4px;
 }
-.tag.hot { background: rgba(248,81,73,0.2); color: var(--red); }
-.tag.chip { background: rgba(88,166,255,0.2); color: var(--accent); }
-.tag.ai { background: rgba(163,113,247,0.2); color: var(--purple); }
-.tag.policy { background: rgba(210,153,29,0.2); color: var(--gold); }
-.tag.ipo { background: rgba(63,185,80,0.2); color: var(--green); }
-.tag.fund { background: rgba(210,153,29,0.2); color: var(--gold); }
-.tag.chain { background: rgba(88,166,255,0.15); color: var(--accent); }
-.tag.risk { background: rgba(248,81,73,0.15); color: var(--red); }
+.tag.hot { background: #ffebe9; color: var(--red); }
+.tag.chip { background: #ddf4ff; color: var(--accent); }
+.tag.ai { background: #fbefff; color: var(--purple); }
+.tag.policy { background: #fff8c5; color: var(--gold); }
+.tag.ipo { background: #dafbe1; color: var(--green); }
+.tag.fund { background: #fff8c5; color: var(--gold); }
+.tag.chain { background: #ddf4ff; color: var(--accent); }
+.tag.risk { background: #ffebe9; color: var(--red); }
 .news-card h3 { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.4; }
 .news-card p { font-size: 0.75rem; color: var(--dim); line-height: 1.5; }
 .news-card .affected { font-size: 0.65rem; margin-top: 6px; }
@@ -121,7 +121,7 @@ body {
 /* Market brief */
 .brief-item {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid rgba(48,54,61,0.5);
+  padding: 8px 0; border-bottom: 1px solid var(--border);
 }
 .brief-item .b-label { font-size: 0.78rem; }
 .brief-item .b-val { font-size: 0.78rem; font-weight: 600; }
@@ -156,7 +156,7 @@ body {
 
 /* Expand detail */
 .stock-detail {
-  display: none; background: rgba(22,27,34,0.6); border: 1px solid var(--border);
+  display: none; background: #f6f8fa; border: 1px solid var(--border);
   border-radius: 0 0 10px 10px; padding: 10px 14px; margin-top: -7px; margin-bottom: 6px;
   font-size: 0.7rem; color: var(--dim); line-height: 1.8;
 }
@@ -203,11 +203,11 @@ body {
 
 /* Fund manager & framework annotations */
 .fm-note {
-  font-size: 0.67rem; color: var(--gold); background: rgba(210,153,29,0.08);
+  font-size: 0.67rem; color: var(--gold); background: #fff8c5;
   padding: 4px 8px; border-radius: 4px; margin-top: 6px; line-height: 1.5;
 }
 .fw-note {
-  font-size: 0.63rem; color: var(--accent); background: rgba(88,166,255,0.08);
+  font-size: 0.63rem; color: var(--accent); background: #ddf4ff;
   padding: 3px 8px; border-radius: 4px; margin-top: 4px; display: inline-block;
 }
 .news-freshness {
@@ -217,7 +217,7 @@ body {
 
 /* Stock holding news item */
 .holding-news-item {
-  padding: 5px 0; border-bottom: 1px solid rgba(48,54,61,0.2); font-size: 0.7rem;
+  padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 0.7rem;
   display: flex; align-items: flex-start; gap: 6px; line-height: 1.5;
 }
 
@@ -226,12 +226,12 @@ body {
   display: inline-block; padding: 3px 10px; border-radius: 12px;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
 }
-.signal-strong_buy  { background: rgba(63,185,80,0.25); color: #3fb950; }
-.signal-buy         { background: rgba(63,185,80,0.15); color: #7ee787; }
-.signal-hold        { background: rgba(139,148,158,0.2); color: #8b949e; }
-.signal-sell        { background: rgba(248,81,73,0.15);  color: #ff7b72; }
-.signal-strong_sell { background: rgba(248,81,73,0.25);  color: #f85149; }
-.signal-alert       { background: rgba(210,153,29,0.25); color: #d2991d; }
+.signal-strong_buy  { background: #dafbe1; color: var(--down); }
+.signal-buy         { background: #dafbe1; color: #1a7f37; }
+.signal-hold        { background: #f3f4f6; color: #656d76; }
+.signal-sell        { background: #ffebe9; color: var(--up); }
+.signal-strong_sell { background: #ffebe9; color: #cf222e; }
+.signal-alert       { background: #fff8c5; color: var(--gold); }
 
 .urgency-bar {
   width: 4px; border-radius: 2px; flex-shrink: 0;
@@ -256,12 +256,12 @@ body {
 .op-stock { font-weight: 700; font-size: 0.9rem; }
 .op-action { font-size: 0.78rem; font-weight: 600; }
 .op-reason { font-size: 0.72rem; color: var(--dim); line-height: 1.5; margin-top: 4px; }
-.op-rule-tag { font-size: 0.6rem; color: var(--dim); background: rgba(88,166,255,0.1); padding: 2px 6px; border-radius: 4px; }
+.op-rule-tag { font-size: 0.6rem; color: var(--accent); background: #ddf4ff; padding: 2px 6px; border-radius: 4px; }
 
 /* Rule engine list */
 .rule-item {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-bottom: 1px solid rgba(48,54,61,0.3);
+  padding: 8px 10px; border-bottom: 1px solid var(--border);
   font-size: 0.73rem;
 }
 .rule-item .rule-name { font-weight: 600; }
@@ -306,22 +306,22 @@ body {
   padding: 8px 12px; font-weight: 700; font-size: 0.78rem;
   display: flex; justify-content: space-between; align-items: center;
 }
-.lu-tier-header.l4 { background: rgba(248,81,73,0.2); color: #f85149; }
-.lu-tier-header.l3 { background: rgba(255,123,114,0.15); color: #ff7b72; }
-.lu-tier-header.l2 { background: rgba(210,153,29,0.15); color: #d2991d; }
+.lu-tier-header.l4 { background: #ffebe9; color: #cf222e; }
+.lu-tier-header.l3 { background: #ffebe9; color: #cf222e; }
+.lu-tier-header.l2 { background: #fff8c5; color: #9a6700; }
 .lu-tier-body { padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 4px; }
 .lu-tag {
   display: inline-block; padding: 3px 8px; border-radius: 4px;
-  font-size: 0.68rem; background: rgba(88,166,255,0.08); color: var(--text);
+  font-size: 0.68rem; background: #f3f4f6; color: var(--text);
   cursor: pointer; transition: all 0.15s; border: 1px solid transparent;
 }
-.lu-tag:hover { border-color: var(--accent); background: rgba(88,166,255,0.15); }
-.lu-tag.match { border-color: var(--gold); background: rgba(210,153,29,0.1); }
-.lu-tag.mine { border-color: var(--up); background: rgba(248,81,73,0.1); }
+.lu-tag:hover { border-color: var(--accent); background: #ddf4ff; }
+.lu-tag.match { border-color: var(--gold); background: #fff8c5; }
+.lu-tag.mine { border-color: var(--up); background: #ffebe9; }
 
 .lu-flow-item {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 7px 10px; border-bottom: 1px solid rgba(48,54,61,0.3);
+  padding: 7px 10px; border-bottom: 1px solid var(--border);
   font-size: 0.73rem;
 }
 .lu-flow-item .f-name { font-weight: 600; }
@@ -396,7 +396,7 @@ body {
 /* Trade log */
 .trade-log-item {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 7px 10px; border-bottom: 1px solid rgba(48,54,61,0.3); font-size: 0.7rem;
+  padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 0.7rem;
 }
 .trade-log-item .tl-act { font-weight: 700; min-width: 32px; }
 .trade-log-item .tl-act.buy  { color: var(--up); }
@@ -410,10 +410,10 @@ body {
   padding: 3px 8px; font-size: 0.6rem; border-radius: 4px; border: none;
   cursor: pointer; font-weight: 600;
 }
-.btn-mini.add  { background: rgba(248,81,73,0.2); color: var(--up); }
-.btn-mini.cut  { background: rgba(63,185,80,0.2); color: var(--down); }
-.btn-mini.close{ background: rgba(248,81,73,0.3); color: #ff7b72; }
-.btn-mini.edit { background: rgba(139,148,158,0.2); color: var(--dim); }
+.btn-mini.add  { background: #ffebe9; color: var(--up); }
+.btn-mini.cut  { background: #dafbe1; color: var(--down); }
+.btn-mini.close{ background: #ffebe9; color: #cf222e; }
+.btn-mini.edit { background: #f3f4f6; color: var(--dim); }
 </style>
 </head>
 <body>
@@ -1196,7 +1196,7 @@ function renderRules() {
   list.innerHTML = cats.map(cat => {
     const catRules = rules.filter(r => r.category === cat);
     return `
-      <div style="padding:6px 10px;font-size:0.65rem;color:var(--gold);font-weight:700;background:rgba(210,153,29,0.05);">📁 ${cat}</div>
+      <div style="padding:6px 10px;font-size:0.65rem;color:var(--gold);font-weight:700;background:#fff8c5;">📁 ${cat}</div>
       ${catRules.map(r => `
         <div class="rule-item">
           <div><div class="rule-name">${r.name}</div><div class="rule-cat">ID: ${r.id} | 优先级: ${r.priority}</div></div>
@@ -1527,7 +1527,7 @@ function renderClosed() {
     <div id="closedSection">
       <div class="sec-title">📦 已清仓 (${closedPositions.length}笔)</div>
       ${closedPositions.slice(0, 10).map(cp => `
-        <div style="font-size:0.7rem;padding:6px 10px;color:var(--dim);border-bottom:1px solid rgba(48,54,61,0.2);display:flex;justify-content:space-between;">
+        <div style="font-size:0.7rem;padding:6px 10px;color:var(--dim);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
           <span>${cp.name} ${cp.code}</span>
           <span>${cp.shares}股 | 成本${cp.cost.toFixed(2)}</span>
           <span style="color:${cp.realizedPnl>=0?'var(--up)':'var(--down)'};">${cp.realizedPnl>=0?'+':''}${cp.realizedPnl.toFixed(0)}</span>
@@ -1793,7 +1793,7 @@ function renderScores() {
       <div style="display:flex;gap:4px;margin-top:4px;">
         ${Object.entries(r.scores).map(([k,v]) => {
           const names = {industry:'产业链',fundMgr:'基金经理',blogger:'博主',luHist:'涨停',momentum:'动量'};
-          return `<span style="font-size:0.6rem;padding:1px 5px;border-radius:3px;background:rgba(88,166,255,0.1);color:var(--dim);">${names[k]}:${v}</span>`;
+          return `<span style="font-size:0.6rem;padding:1px 5px;border-radius:3px;background:#ddf4ff;color:var(--accent);">${names[k]}:${v}</span>`;
         }).join('')}
       </div>
     </div>`;
