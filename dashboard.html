@@ -685,13 +685,13 @@ function getMarketStatus() {
   return 'closed';
 }
 
-const SINA_CODES = ['sh600961','sz000636','sh600392','sz002463','sh600378','sz002384','sz002436','sz000792','sh600707'];
+const SINA_CODES = ['sh600961','sz000636','sh600392','sz002463','sh600378','sz002384','sz002436','sh603986','sh588200'];
 const INDEX_CODES = ['s_sh000001','s_sz399001','s_sh000688','s_sz399006'];
 const ALL_CODES = [...INDEX_CODES, ...SINA_CODES];
 
 const CODE_TO_ID = {
   'sh600961':'600961','sz000636':'000636','sh600392':'600392','sz002463':'002463',
-  'sh600378':'600378','sz002384':'002384','sz002436':'002436','sz000792':'000792','sh600707':'600707',
+  'sh600378':'600378','sz002384':'002384','sz002436':'002436','sh603986':'603986','sh588200':'588200',
   's_sh000001':'000001','s_sz399001':'399001','s_sh000688':'000688','s_sz399006':'399006'
 };
 
@@ -1420,15 +1420,15 @@ let closedPositions = [];
 let tradeLog = [];
 
 const defaultStocks = [
-  { id:"zyjt", name:"株冶集团", code:"600961", shares:1000, cost:33.943, price:35.710, pnl:1743.44, pnlPct:5.136, mktVal:35710, sector:"有色金属", pe:8.37, fundFlow: null, intraday: null, support: 34.50, resistance: null, advice:"设止盈34.50，破5日线就走" },
-  { id:"fhgk", name:"风华高科", code:"000636", shares:600, cost:73.570, price:72.380, pnl:-740.92, pnlPct:-1.678, mktVal:43428, sector:"电子元件", pe:278, fundFlow: null, intraday: null, support: 70.00, resistance: 74.00, advice:"PE278倍，反弹到74+减仓" },
-  { id:"shzy", name:"盛和资源", code:"600392", shares:2200, cost:33.550, price:31.600, pnl:-4333.54, pnlPct:-5.871, mktVal:69520, sector:"稀土", pe:null, fundFlow: -5.71, intraday: null, support: 30.50, resistance: 33.00, advice:"🚨优先处理：破30.50止损，反弹33减仓" },
-  { id:"hdgf", name:"沪电股份", code:"002463", shares:200, cost:151.005, price:143.350, pnl:-1550.34, pnlPct:-5.133, mktVal:28670, sector:"PCB", pe:null, fundFlow: null, intraday: null, support: 140.00, resistance: null, advice:"基本面最硬，140以下可补仓" },
-  { id:"hhkj", name:"昊华科技", code:"600378", shares:800, cost:69.594, price:67.150, pnl:-1989.41, pnlPct:-3.573, mktVal:53720, sector:"化工", pe:null, fundFlow: null, intraday: null, support: null, resistance: 70.00, advice:"六氟化钨概念退潮，反弹70+减仓" },
-  { id:"dsjm", name:"东山精密", code:"002384", shares:300, cost:261.017, price:257.130, pnl:-1213.83, pnlPct:-1.550, mktVal:77139, sector:"光通信", pe:230, fundFlow: null, intraday: null, support: 248.00, resistance: null, advice:"核心仓位设止损248，方向对但估值高" },
-  { id:"xskj", name:"兴森科技", code:"002436", shares:200, cost:46.685, price:50.230, pnl:698.98, pnlPct:7.486, mktVal:10046, sector:"PCB/半导体", pe:null, fundFlow: null, intraday: null, support: 48.00, resistance: null, advice:"继续持有，设止盈48" },
-  { id:"yhgf", name:"盐湖股份", code:"000792", shares:400, cost:31.223, price:31.340, pnl:35.73, pnlPct:0.286, mktVal:12536, sector:"锂矿", pe:null, fundFlow: null, intraday: "超级机构买盘", support: 30.00, resistance: null, advice:"🔥长烟确认右侧节点！分时强劲，可加仓" },
-  { id:"chgf", name:"彩虹股份", code:"600707", shares:400, cost:13.453, price:13.530, pnl:23.19, pnlPct:0.431, mktVal:5412, sector:"面板", pe:null, fundFlow: null, intraday: null, support: null, resistance: null, advice:"鸡肋仓，可清掉集中资金" }
+  { id:"hhkj", name:"昊华科技", code:"600378", shares:800, cost:69.594, price:62.300, pnl:-5866.96, pnlPct:-10.538, mktVal:49840, sector:"电子特气", pe:null, fundFlow: null, intraday: null, support: 58.00, resistance: 70.00, advice:"🚨亏损-10.5%触发强制止损！反弹减仓或立即止损" },
+  { id:"shzy", name:"盛和资源", code:"600392", shares:2200, cost:33.550, price:30.120, pnl:-7587.48, pnlPct:-10.280, mktVal:66264, sector:"稀土", pe:null, fundFlow: -5.71, intraday: null, support: 30.50, resistance: 33.00, advice:"🚨亏损-10.3%触发强制止损！破30.50必须止损，反弹33减仓" },
+  { id:"zyjt", name:"株冶集团", code:"600961", shares:1000, cost:33.943, price:34.290, pnl:324.17, pnlPct:0.955, mktVal:34290, sector:"有色金属", pe:8.37, fundFlow: null, intraday: null, support: 34.50, resistance: null, advice:"设止盈34.50，破5日线就走" },
+  { id:"zxcy", name:"兆易创新", code:"603986", shares:100, cost:750.097, price:770.000, pnl:1941.74, pnlPct:2.589, mktVal:77000, sector:"存储芯片", pe:null, fundFlow: null, intraday: null, support: 740.00, resistance: null, advice:"✨新仓！存储龙头，张坤/谢治宇共识方向。设止损740" },
+  { id:"fhgk", name:"风华高科", code:"000636", shares:600, cost:73.570, price:78.500, pnl:2928.80, pnlPct:6.635, mktVal:47100, sector:"被动元件", pe:278, fundFlow: null, intraday: null, support: 70.00, resistance: 74.00, advice:"盈利+6.6%，设移动止盈保护。PE278倍注意估值风险" },
+  { id:"dsjm", name:"东山精密", code:"002384", shares:200, cost:261.715, price:260.320, pnl:-311.27, pnlPct:-0.595, mktVal:52064, sector:"光通信", pe:230, fundFlow: null, intraday: null, support: 248.00, resistance: null, advice:"减仓至200股，CPO光通信技术路线风险。严守止损248" },
+  { id:"xskj", name:"兴森科技", code:"002436", shares:200, cost:46.685, price:51.810, pnl:1014.82, pnlPct:10.869, mktVal:10362, sector:"PCB/IC载板", pe:null, fundFlow: null, intraday: null, support: 48.00, resistance: null, advice:"🟢盈利+10.9%表现最佳！设移动止盈，继续持有" },
+  { id:"hdgf", name:"沪电股份", code:"002463", shares:200, cost:151.005, price:147.280, pnl:-764.73, pnlPct:-2.532, mktVal:29456, sector:"PCB", pe:null, fundFlow: null, intraday: null, support: 140.00, resistance: null, advice:"140以下补仓逻辑不变。傅鹏博共识票，基本面最硬" },
+  { id:"kccp", name:"科创芯片ETF", code:"588200", shares:6400, cost:4.472, price:4.487, pnl:89.85, pnlPct:0.314, mktVal:28716.8, sector:"半导体ETF", pe:null, fundFlow: null, intraday: null, support: null, resistance: null, advice:"✨新仓！替代科创50，更纯的半导体指数。定投思维持有" }
 ];
 
 function loadPortfolio() {
@@ -1697,7 +1697,7 @@ const FACTOR_WEIGHTS = { industry: 0.35, fundMgr: 0.25, blogger: 0.20, luHist: 0
 
 function scoreIndustry(stock) {
   const code = stock.code; let score = 0;
-  const tier1 = ['600497','002384'], tier2 = ['002463','002436'], tier3 = ['600378','600961','600392'], tier4 = ['000636','000792'], tier5 = ['600707'];
+  const tier1 = ['603986','002384'], tier2 = ['002463','002436'], tier3 = ['600378','600961','600392'], tier4 = ['000636','588200'], tier5 = [];
   if (tier1.includes(code)) score = 95;
   else if (tier2.includes(code)) score = 85;
   else if (tier3.includes(code)) score = 70;
@@ -1710,8 +1710,10 @@ function scoreIndustry(stock) {
 
 function scoreFundMgr(stock) {
   const code = stock.code; let score = 50;
-  const strongBuy = ['002463','002916'], moderateBuy = ['000792'], beingSold = ['002384'];
-  const noCoverage = ['600378','600961','600392','000636','002436','600707','600497'];
+  const strongBuy = ['002463','603986']; // 沪电(傅鹏博PCB), 兆易创新(张坤存储)
+  const moderateBuy = ['002384']; // 东山精密分歧
+  const beingSold = [];
+  const noCoverage = ['600378','600961','600392','000636','002436','588200'];
   if (strongBuy.includes(code)) score = 90;
   else if (moderateBuy.includes(code)) score = 70;
   else if (beingSold.includes(code)) score = 30;
@@ -1721,7 +1723,8 @@ function scoreFundMgr(stock) {
 
 function scoreBlogger(stock) {
   const code = stock.code;
-  const changyanStrong = ['000792','601138'], changyanWatch = ['600497'];
+  const changyanStrong = ['601138']; // 工业富联
+  const changyanWatch = ['603986','002463']; // 兆易创新(存储共识), 沪电(PCB共识)
   if (changyanStrong.includes(code)) return 90;
   if (changyanWatch.includes(code)) return 75;
   return 30;
