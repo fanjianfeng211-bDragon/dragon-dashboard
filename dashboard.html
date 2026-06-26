@@ -414,6 +414,50 @@ body {
 .btn-mini.cut  { background: #dafbe1; color: var(--down); }
 .btn-mini.close{ background: #ffebe9; color: #cf222e; }
 .btn-mini.edit { background: #f3f4f6; color: var(--dim); }
+
+/* Command bar */
+.cmd-bar {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px); max-width: 800px; z-index: 60;
+  display: none; flex-direction: column; gap: 4px;
+}
+.cmd-bar.show { display: flex; }
+.cmd-input-wrap {
+  display: flex; background: var(--card); border: 2px solid var(--accent);
+  border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.cmd-prompt {
+  padding: 10px 8px 10px 14px; font-size: 0.9rem; color: var(--accent);
+  font-weight: 700; user-select: none; display: flex; align-items: center;
+}
+.cmd-input {
+  flex: 1; background: transparent; border: none; color: var(--text);
+  font-size: 0.85rem; padding: 10px 4px; outline: none; font-family: monospace;
+}
+.cmd-input::placeholder { color: var(--dim); }
+.cmd-btn {
+  background: var(--accent); color: #fff; border: none;
+  padding: 10px 16px; font-size: 0.75rem; cursor: pointer; font-weight: 600;
+}
+.cmd-btn:active { opacity: 0.8; }
+.cmd-hint {
+  font-size: 0.6rem; color: var(--dim); text-align: center;
+  padding: 2px 8px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+.cmd-hint span { cursor: pointer; }
+.cmd-hint span:hover { color: var(--accent); }
+
+/* Toast */
+.toast {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  padding: 10px 20px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+  z-index: 300; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.toast.show { opacity: 1; }
+.toast.ok { background: #dafbe1; color: #1a7f37; border: 1px solid #1a7f37; }
+.toast.err { background: #ffebe9; color: #cf222e; border: 1px solid #cf222e; }
+.toast.info { background: #ddf4ff; color: #0969da; border: 1px solid #0969da; }
 </style>
 </head>
 <body>
@@ -585,6 +629,26 @@ body {
 
 <!-- FAB: Quick Trade -->
 <button class="fab" onclick="openTradeModal()" title="快速交易">+</button>
+
+<!-- Command Bar -->
+<div class="cmd-bar" id="cmdBar">
+  <div class="cmd-input-wrap">
+    <span class="cmd-prompt">&gt;</span>
+    <input class="cmd-input" id="cmdInput" placeholder="输入指令... (help 查看所有命令)" autocomplete="off">
+    <button class="cmd-btn" onclick="execCmd()">执行</button>
+  </div>
+  <div class="cmd-hint">
+    <span onclick="quickCmd('help')">help</span>
+    <span onclick="quickCmd('加仓')">加仓</span>
+    <span onclick="quickCmd('清仓')">清仓</span>
+    <span onclick="quickCmd('止损')">止损</span>
+    <span onclick="quickCmd('主题 黑')">暗黑</span>
+    <span onclick="quickCmd('刷新')">刷新</span>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <!-- Trade Modal -->
 <div class="trade-modal" id="tradeModal" onclick="if(event.target===this)closeTradeModal()">
@@ -1852,7 +1916,236 @@ document.getElementById('dateDisplay').textContent =
   `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 updateTimestamp();
 
+// ============================================================
+//  COMMAND PARSER — 网页命令栏 Ctrl+K
+// ============================================================
+
+let cmdHistory = [], cmdIdx = -1;
+
+function findStock(name) {
+  const n = name.toLowerCase();
+  return portfolioStocks.find(s =>
+    s.name.toLowerCase().includes(n) || s.code.includes(n) || s.id === n
+  );
+}
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  clearTimeout(t._tid); t._tid = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function quickCmd(s) {
+  const inp = document.getElementById('cmdInput');
+  inp.value = s + ' ';
+  document.getElementById('cmdBar').classList.add('show');
+  inp.focus();
+}
+
+function execCmd() {
+  const raw = document.getElementById('cmdInput').value.trim();
+  if (!raw) return;
+  cmdHistory.unshift(raw); cmdIdx = -1;
+  if (cmdHistory.length > 50) cmdHistory.pop();
+  document.getElementById('cmdInput').value = '';
+  document.getElementById('cmdBar').classList.remove('show');
+
+  const args = raw.split(/\s+/);
+  const cmd = args[0];
+  try {
+    switch (cmd) {
+      case 'help': case 'h': case '?':
+        return toast('加仓/减仓/清仓 股票 股数 价格 | 止损/止盈 股票 价格 | 价格 股票 现价 | 主题 白/黑 | 刷新 | 导出 | 导入 | 笔记 | 规则 on/off 规则名', 'info');
+
+      case '加仓': case 'buy': case 'b': case '建仓': {
+        const name = args[1]; const shares = parseInt(args[2]); const price = parseFloat(args[3]);
+        if (!name || !shares || !price) return toast('格式: 加仓 股票名 股数 价格', 'err');
+        const exist = findStock(name);
+        if (exist) {
+          openTradeModal(exist.code, 'buy');
+          setTimeout(() => {
+            document.getElementById('tradeShares').value = shares;
+            document.getElementById('tradePrice').value = price;
+            confirmTrade();
+          }, 100);
+          return toast(`✅ 加仓 ${exist.name} ${shares}股 @${price.toFixed(2)}`, 'ok');
+        } else {
+          openTradeModal('_new', 'buy');
+          setTimeout(() => {
+            document.getElementById('tradeName').value = name;
+            document.getElementById('tradeCode').value = args[1] || '';
+            document.getElementById('tradeShares').value = shares;
+            document.getElementById('tradePrice').value = price;
+            confirmTrade();
+          }, 100);
+          return toast(`✅ 建仓 ${name} ${shares}股 @${price.toFixed(2)}`, 'ok');
+        }
+      }
+
+      case '减仓': case 'sell': case 's': {
+        const name = args[1]; const shares = parseInt(args[2]); const price = parseFloat(args[3]);
+        if (!name || !shares || !price) return toast('格式: 减仓 股票名 股数 价格', 'err');
+        const st = findStock(name);
+        if (!st) return toast(`❌ 未找到持仓: ${name}`, 'err');
+        openTradeModal(st.code, 'sell');
+        setTimeout(() => {
+          document.getElementById('tradeShares').value = shares;
+          document.getElementById('tradePrice').value = price;
+          confirmTrade();
+        }, 100);
+        return toast(`✅ 减仓 ${st.name} ${shares}股 @${price.toFixed(2)}`, 'ok');
+      }
+
+      case '清仓': case 'close': case 'c': {
+        const name = args[1]; const price = parseFloat(args[2]);
+        if (!name) return toast('格式: 清仓 股票名 [价格]', 'err');
+        const st = findStock(name);
+        if (!st) return toast(`❌ 未找到持仓: ${name}`, 'err');
+        openTradeModal(st.code, 'close');
+        if (price) {
+          setTimeout(() => { document.getElementById('tradePrice').value = price; confirmTrade(); }, 100);
+        }
+        return toast(`✅ 清仓 ${st.name} ${st.shares}股`, 'ok');
+      }
+
+      case '止损': case 'sl': {
+        const name = args[1]; const price = parseFloat(args[2]);
+        if (!name || !price) return toast('格式: 止损 股票名 价格', 'err');
+        const st = findStock(name);
+        if (!st) return toast(`❌ 未找到: ${name}`, 'err');
+        st.support = price;
+        st.advice = `止损位已设 ${price.toFixed(2)}` + (st.advice ? ' | ' + st.advice : '');
+        savePortfolio(); renderPortfolio();
+        return toast(`✅ ${st.name} 止损位 → ${price.toFixed(2)}`, 'ok');
+      }
+
+      case '止盈': case 'tp': {
+        const name = args[1]; const price = parseFloat(args[2]);
+        if (!name || !price) return toast('格式: 止盈 股票名 价格', 'err');
+        const st = findStock(name);
+        if (!st) return toast(`❌ 未找到: ${name}`, 'err');
+        st.resistance = price;
+        st.advice = `止盈位已设 ${price.toFixed(2)}` + (st.advice ? ' | ' + st.advice : '');
+        savePortfolio(); renderPortfolio();
+        return toast(`✅ ${st.name} 止盈位 → ${price.toFixed(2)}`, 'ok');
+      }
+
+      case '价格': case 'price': case 'p': {
+        const name = args[1]; const price = parseFloat(args[2]);
+        if (!name || !price) return toast('格式: 价格 股票名 现价', 'err');
+        const st = findStock(name);
+        if (!st) return toast(`❌ 未找到: ${name}`, 'err');
+        st.price = price;
+        recalcAll(); savePortfolio(); renderPortfolio(); updateSummaryCards();
+        return toast(`✅ ${st.name} 现价 → ${price.toFixed(2)}`, 'ok');
+      }
+
+      case '主题': case 'theme': {
+        const t = args[1];
+        if (t === '黑' || t === 'dark' || t === 'd') {
+          document.documentElement.style.setProperty('--bg', '#0d1117');
+          document.documentElement.style.setProperty('--card', '#161b22');
+          document.documentElement.style.setProperty('--border', '#30363d');
+          document.documentElement.style.setProperty('--text', '#c9d1d9');
+          document.documentElement.style.setProperty('--dim', '#8b949e');
+          toast('🌙 暗黑主题', 'ok');
+        } else if (t === '白' || t === 'light' || t === 'l') {
+          document.documentElement.style.setProperty('--bg', '#ffffff');
+          document.documentElement.style.setProperty('--card', '#f6f8fa');
+          document.documentElement.style.setProperty('--border', '#d0d7de');
+          document.documentElement.style.setProperty('--text', '#1f2328');
+          document.documentElement.style.setProperty('--dim', '#656d76');
+          toast('☀️ 明亮主题', 'ok');
+        } else {
+          return toast('格式: 主题 白/黑', 'err');
+        }
+        return;
+      }
+
+      case '刷新': case 'refresh': case 'r':
+        refreshLiveData();
+        if (newsData) renderAllNews(); else loadNews();
+        return toast('🔄 数据已刷新', 'ok');
+
+      case '导出': case 'export':
+        exportData(); return toast('📤 数据已导出', 'ok');
+
+      case '导入': case 'import':
+        importData(); return toast('📥 选择导入文件', 'info');
+
+      case '笔记': case 'notes': case 'n':
+        switchTab('notes'); return toast('📝 已切换到笔记', 'info');
+
+      case '规则': case 'rule': {
+        const action = args[1]; const ruleName = args.slice(2).join(' ');
+        if (action === 'on' || action === 'off') {
+          const rule = rules.find(r => r.name.includes(ruleName));
+          if (!rule) return toast(`❌ 未找到规则: ${ruleName}`, 'err');
+          rule.enabled = (action === 'on');
+          refreshAll();
+          return toast(`✅ 规则 "${rule.name}" → ${action === 'on' ? '启用' : '禁用'}`, 'ok');
+        }
+        return toast('格式: 规则 on/off 规则名', 'err');
+      }
+
+      default:
+        return toast(`❌ 未知命令: ${cmd}。输入 help 查看可用命令`, 'err');
+    }
+  } catch (e) {
+    return toast(`❌ 执行出错: ${e.message}`, 'err');
+  }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  const bar = document.getElementById('cmdBar');
+  const inp = document.getElementById('cmdInput');
+
+  // Ctrl+K / Cmd+K → toggle command bar
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    bar.classList.toggle('show');
+    if (bar.classList.contains('show')) { inp.focus(); }
+    return;
+  }
+
+  // Escape → close
+  if (e.key === 'Escape' && bar.classList.contains('show')) {
+    bar.classList.remove('show'); return;
+  }
+
+  // Only when command bar is visible
+  if (!bar.classList.contains('show')) return;
+
+  // Enter → execute
+  if (e.key === 'Enter') { e.preventDefault(); execCmd(); return; }
+
+  // Arrow up/down → history
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (cmdHistory.length > 0) {
+      cmdIdx = Math.min(cmdIdx + 1, cmdHistory.length - 1);
+      inp.value = cmdHistory[cmdIdx];
+    }
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (cmdIdx > 0) { cmdIdx--; inp.value = cmdHistory[cmdIdx]; }
+    else { cmdIdx = -1; inp.value = ''; }
+  }
+});
+
+// Click outside → close
+document.addEventListener('click', function(e) {
+  const bar = document.getElementById('cmdBar');
+  if (bar.classList.contains('show') && !bar.contains(e.target) && e.target.className !== 'fab') {
+    bar.classList.remove('show');
+  }
+});
+
 // Expose globals
+window.quickCmd = quickCmd;
+window.execCmd = execCmd;
 window.exportData = exportData;
 window.importData = importData;
 window.openTradeModal = openTradeModal;
