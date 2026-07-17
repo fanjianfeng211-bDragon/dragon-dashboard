@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>龙神交易体系 · 2026.7.17</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --muted: #8b949e; --green: #3fb950;
+    --red: #f85149; --yellow: #d2991d; --blue: #58a6ff;
+    --purple: #bc8cff; --orange: #f0883e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; line-height:1.6; padding:12px; -webkit-text-size-adjust:100%; }
+  .container { max-width:1200px; margin:0 auto; }
+
+  /* Typography */
+  h1 { font-size:clamp(1.3em, 4vw, 2em); text-align:center; margin-bottom:4px; background:linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; color:var(--blue); }
+  h2 { font-size:clamp(1em, 3vw, 1.3em); color:var(--blue); border-bottom:1.5px solid var(--border); padding-bottom:6px; margin:24px 0 12px; }
+  h3 { font-size:0.95em; color:var(--text); margin:12px 0 8px; }
+  .subtitle { text-align:center; color:var(--muted); margin-bottom:20px; font-size:0.85em; }
+
+  /* Grid — mobile first */
+  .grid2, .grid3 { display:grid; grid-template-columns: 1fr; gap:12px; }
+
+  /* Cards */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; }
+  .card-header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:10px; gap:6px; }
+  .card-header .name { font-size:1em; font-weight:700; }
+  .card-header .code { color:var(--muted); font-size:0.8em; }
+
+  /* Badges */
+  .badge { display:inline-block; padding:3px 8px; border-radius:4px; font-size:0.72em; font-weight:600; white-space:nowrap; }
+  .badge-green { background:var(--green); color:#000; }
+  .badge-red { background:var(--red); color:#fff; }
+  .badge-yellow { background:var(--yellow); color:#000; }
+  .badge-blue { background:var(--blue); color:#000; }
+  .badge-purple { background:var(--purple); color:#000; }
+  .badge-orange { background:var(--orange); color:#000; }
+
+  /* Stats */
+  .stat-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(48,54,61,0.5); font-size:0.85em; gap:8px; }
+  .stat-row:last-child { border-bottom:none; }
+  .stat-label { color:var(--muted); flex-shrink:0; }
+  .stat-value { font-weight:600; }
+  .stat-green { color:var(--green); }
+  .stat-red { color:var(--red); }
+  .stat-yellow { color:var(--yellow); }
+
+  /* Level bars */
+  .level-bar { display:flex; align-items:center; margin:2px 0; font-size:0.78em; gap:4px; }
+  .level-bar .label { width:90px; color:var(--muted); flex-shrink:0; font-size:0.9em; }
+  .level-bar .price { width:58px; text-align:right; font-weight:600; flex-shrink:0; }
+  .level-bar .dist { width:50px; text-align:right; font-size:0.85em; flex-shrink:0; }
+  .level-bar .bar { height:3px; border-radius:2px; margin:0 4px; flex:1; min-width:20px; }
+  .bar-green { background:linear-gradient(90deg, var(--green), transparent); }
+  .bar-red { background:linear-gradient(270deg, var(--red), transparent); }
+  .bar-yellow { background:linear-gradient(90deg, var(--yellow), transparent); }
+
+  /* Checklist */
+  .checklist { list-style:none; }
+  .checklist li { padding:10px 12px; margin:5px 0; border-radius:6px; border-left:3px solid; font-size:0.85em; line-height:1.5; }
+  .checklist .p0 { background:rgba(248,81,73,0.12); border-color:var(--red); }
+  .checklist .p1 { background:rgba(210,153,29,0.1); border-color:var(--yellow); }
+  .checklist .p2 { background:rgba(88,166,255,0.1); border-color:var(--blue); }
+
+  /* Mini chart */
+  .mini-chart { font-family:'SF Mono','Cascadia Code','Courier New',monospace; font-size:0.7em; line-height:1.35; color:var(--muted); white-space:pre; overflow-x:auto; margin:6px 0; padding:8px 10px; background:rgba(0,0,0,0.3); border-radius:6px; -webkit-overflow-scrolling:touch; }
+
+  /* Summary */
+  .summary-box { display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin:16px 0; }
+  .summary-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:12px 8px; text-align:center; }
+  .summary-item .num { font-size:1.4em; font-weight:800; }
+  .summary-item .label { color:var(--muted); font-size:0.75em; }
+
+  /* Risk matrix — scrollable on mobile */
+  .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -12px; padding:0 12px; }
+  .risk-matrix { width:100%; border-collapse:collapse; min-width:600px; }
+  .risk-matrix td { padding:6px 8px; font-size:0.8em; text-align:center; border-bottom:1px solid var(--border); }
+  .risk-matrix th { padding:6px 8px; font-size:0.75em; color:var(--muted); text-align:center; border-bottom:2px solid var(--border); white-space:nowrap; }
+
+  /* Tier icon */
+  .tier-icon { font-size:1.3em; }
+
+  /* Touch-friendly tap targets */
+  .card-header .name { min-height:28px; display:flex; align-items:center; }
+
+  /* Strong text */
+  strong { color:var(--text); }
+
+  /* Tablet + */
+  @media (min-width:600px) {
+    body { padding:16px; }
+    .grid3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; }
+    .card { padding:16px; }
+    .stat-row { font-size:0.88em; }
+    .summary-box { grid-template-columns: repeat(4, 1fr); gap:12px; }
+    .summary-item .num { font-size:1.8em; }
+    .level-bar .label { width:100px; }
+    .level-bar .price { width:65px; }
+    .level-bar .dist { width:55px; }
+    .checklist li { font-size:0.9em; }
+    h2 { margin:28px 0 14px; }
+  }
+
+  /* Desktop */
+  @media (min-width:900px) {
+    body { padding:20px; }
+    .grid2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:20px; }
+    .grid3 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px; }
+    .card { padding:20px; }
+    .stat-row { font-size:0.9em; }
+    .mini-chart { font-size:0.75em; }
+    .level-bar { font-size:0.82em; }
+    .level-bar .label { width:120px; }
+    .level-bar .price { width:70px; }
+    .level-bar .dist { width:60px; }
+    h1 { font-size:2em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🐉 龙神交易体系</h1>
+<p class="subtitle">基于 Mi姐文档 + 芝士观点 · 2026年7月17日诊断</p>
+
+<!-- Summary -->
+<div class="summary-box">
+  <div class="summary-item"><div class="num" style="color:var(--blue)">44万</div><div class="label">总资产</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--red)">-4.0万</div><div class="label">总浮亏</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--green)">3层</div><div class="label">资金体系</div></div>
+  <div class="summary-item"><div class="num" style="color:var(--yellow)">13</div><div class="label">持仓标的</div></div>
+</div>
+
+<!-- ============ TRADING SYSTEM ============ -->
+<h2>📐 交易体系框架</h2>
+
+<div class="grid3">
+  <div class="card">
+    <h3>🛡️ 稳健层（12万）</h3>
+    <div class="stat-row"><span class="stat-label">持有周期</span><span>1-2月</span></div>
+    <div class="stat-row"><span class="stat-label">核心战法</span><span>三周期选股 + 520战法</span></div>
+    <div class="stat-row"><span class="stat-label">买入信号</span><span>MA5↑MA20金叉 + MACD零上</span></div>
+    <div class="stat-row"><span class="stat-label">卖出纪律</span><span>MA5↓MA20死叉离场</span></div>
+    <div class="stat-row"><span class="stat-label">当前持仓</span><span>央创ETF / 中证2000 / 中国船舶</span></div>
+  </div>
+  <div class="card">
+    <h3>⚔️ 弹性层（18万）</h3>
+    <div class="stat-row"><span class="stat-label">持有周期</span><span>1-2周</span></div>
+    <div class="stat-row"><span class="stat-label">核心战法</span><span>龙头战法 + 情绪周期</span></div>
+    <div class="stat-row"><span class="stat-label">买入信号</span><span>板块最强+龙头确认+换手充分</span></div>
+    <div class="stat-row"><span class="stat-label">止损铁律</span><span>破5日线减仓，破位即走</span></div>
+    <div class="stat-row"><span class="stat-label">当前持仓</span><span>昭衍/盛和/工业富联/埃斯顿/天娱/科创50</span></div>
+  </div>
+  <div class="card">
+    <h3>🏛️ 基金层（14万）</h3>
+    <div class="stat-row"><span class="stat-label">持有周期</span><span>半年-1年</span></div>
+    <div class="stat-row"><span class="stat-label">核心策略</span><span>产业周期 + 定投微笑曲线</span></div>
+    <div class="stat-row"><span class="stat-label">择时</span><span>周期底部布局，顶部减仓</span></div>
+    <div class="stat-row"><span class="stat-label">做T</span><span>底仓不动，浮仓波段</span></div>
+    <div class="stat-row"><span class="stat-label">当前持仓</span><span>银河创新/华夏游戏/方正富邦/纳指</span></div>
+  </div>
+</div>
+
+<!-- ============ KEY PRINCIPLES ============ -->
+<h2>🧠 核心原则（Mi姐八条）</h2>
+<div class="grid2">
+  <div class="card">
+    <div class="stat-row"><span>① 低位重逻辑，高位重技术</span><span class="badge badge-blue">择时</span></div>
+    <div class="stat-row"><span>② 顺大势逆小势</span><span class="badge badge-green">方向</span></div>
+    <div class="stat-row"><span>③ 趋势不明，宁可休息</span><span class="badge badge-yellow">纪律</span></div>
+    <div class="stat-row"><span>④ 永不补仓，错了就走</span><span class="badge badge-red">止损</span></div>
+  </div>
+  <div class="card">
+    <div class="stat-row"><span>⑤ 学会活下来，才有机会翻身</span><span class="badge badge-red">风控</span></div>
+    <div class="stat-row"><span>⑥ 买横买坑不买竖</span><span class="badge badge-green">买点</span></div>
+    <div class="stat-row"><span>⑦ 下跌不言底，反弹不言顶</span><span class="badge badge-yellow">趋势</span></div>
+    <div class="stat-row"><span>⑧ 不冲高不卖，不跳水不买</span><span class="badge badge-blue">操作</span></div>
+  </div>
+</div>
+
+<!-- ============ PORTFOLIO ============ -->
+<h2>🛡️ 稳健层 · 持仓诊断</h2>
+<div class="grid3">
+
+  <!-- 央创ETF -->
+  <div class="card">
+    <div class="card-header"><span class="name">央创ETF <span class="code">515900</span></span><span class="badge badge-yellow">🟡 左侧</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>1.612 → <span class="stat-red">1.593</span> (-1.19%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>33,931 / 28%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>芝士推荐中特估防御</span></div>
+    <div class="stat-row"><span class="stat-label">形态</span><span>🔔 平底结构 1.58</span></div>
+    <div style="margin-top:10px;"><strong>🟢 支撑</strong></div>
+    <div class="level-bar"><span class="label">20日低</span><span class="price">1.58</span><span class="dist">↓0.7%</span><div class="bar bar-green"></div></div>
+    <div style="margin-top:6px;"><strong>🔴 压力</strong></div>
+    <div class="level-bar"><span class="label">MA5</span><span class="price">1.63</span><span class="dist">↑2.3%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">MA20</span><span class="price">1.68</span><span class="dist">↑5.5%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">筹码峰</span><span class="price">1.77</span><span class="dist">↑11%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">1.72-1.75</span> / <span class="stat-red">1.55</span></div>
+  </div>
+
+  <!-- 中证2000 -->
+  <div class="card">
+    <div class="card-header"><span class="name">中证2000ETF <span class="code">563330</span></span><span class="badge badge-yellow">🟡 左侧</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>4.127 → <span class="stat-red">4.027</span> (-2.41%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>33,424 / 28%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>芝士推荐小盘左侧</span></div>
+    <div class="stat-row"><span class="stat-label">支撑</span><span>4.01（20日+120日双重低点）</span></div>
+    <div class="level-bar"><span class="label">双重低点</span><span class="price">4.01</span><span class="dist">↓0.4%</span><div class="bar bar-green"></div></div>
+    <div class="level-bar"><span class="label">MA20</span><span class="price">4.40</span><span class="dist">↑9.3%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">前高</span><span class="price">4.70</span><span class="dist">↑16.6%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">4.40-4.50</span> / <span class="stat-red">3.85</span></div>
+  </div>
+
+  <!-- 中国船舶 -->
+  <div class="card">
+    <div class="card-header"><span class="name">中国船舶 <span class="code">600150</span></span><span class="badge badge-green">🟢 刚建仓</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>32.337 → <span class="stat-green">32.340</span> (+0.01%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>22,638 / 19%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>造船周期 + 军备竞赛</span></div>
+    <div class="stat-row"><span class="stat-label">形态</span><span>🔔 平底结构 32.12</span></div>
+    <div class="level-bar"><span class="label">平底</span><span class="price">32.12</span><span class="dist">↓0.7%</span><div class="bar bar-green"></div></div>
+    <div class="level-bar"><span class="label">120日低</span><span class="price">30.00</span><span class="dist">↓7.2%</span><div class="bar bar-green"></div></div>
+    <div class="level-bar"><span class="label">MA20</span><span class="price">35.15</span><span class="dist">↑8.7%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">前高</span><span class="price">43.42</span><span class="dist">↑34%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">35-36</span> / <span class="stat-red">30.50</span></div>
+  </div>
+</div>
+
+<h2>⚔️ 弹性层 · 持仓诊断</h2>
+
+<!-- 昭衍新药 - BEST -->
+<div class="card" style="border-color:var(--green); margin-bottom:16px;">
+  <div class="card-header">
+    <span class="name">⭐ 昭衍新药 <span class="code">603127</span> — 技术面最优</span>
+    <span class="badge badge-green">多头唯一</span>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="stat-row"><span class="stat-label">成本/现价</span><span>51.269 → <span class="stat-red">47.930</span> (-6.57%)</span></div>
+      <div class="stat-row"><span class="stat-label">市值/仓位</span><span>52,723 / 29%</span></div>
+      <div class="stat-row"><span class="stat-label">逻辑</span><span>CRO猴模块龙头，创新药政策催化</span></div>
+      <div class="stat-row"><span class="stat-label">520战法</span><span class="stat-green">🟡 MA5>MA20 多头</span></div>
+      <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-green">🟢 零上金叉（全仓唯一）</span></div>
+      <div class="stat-row"><span class="stat-label">均线排列</span><span class="stat-green">🟢 MA5>MA10>MA20 多头</span></div>
+      <div class="stat-row"><span class="stat-label">形态判断</span><span>经典突破回踩 — 跌停回踩MA5</span></div>
+      <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">53-55</span> / <span class="stat-red">41.00 (MA20破位)</span></div>
+    </div>
+    <div>
+      <div class="mini-chart">前高 55.68 ━━━━━━━━ 🔴 目标位
+筹码峰 53.25 ━━━━━━━━ 🔴 突破即加速
+MA5  48.17 ━━━━━━━━ 🟡 周一可过
+━━━━ 现价 47.93 ━━━━ ⚔️
+放量区 46.02 ━━━━━━━ 🟢 支撑
+放量区 43.01 ━━━━━━━ 🟢 筹码支撑
+MA20 41.38 ━━━━━━━━ 🟢 趋势生命线</div>
+      <div class="stat-row"><span class="stat-label">周一关键</span><span class="stat-yellow">不能续跌停。守MA20(41.38)</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+
+  <!-- 埃斯顿 -->
+  <div class="card">
+    <div class="card-header"><span class="name">埃斯顿 <span class="code">002747</span></span><span class="badge badge-yellow">🟡 博反弹</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>39.020 → <span class="stat-red">38.190</span> (-2.20%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>19,095 / 11%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>机器人龙头，超跌博反弹</span></div>
+    <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-yellow">🟡 零上收敛（防死叉）</span></div>
+    <div class="stat-row"><span class="stat-label">关键位</span><span>MA20=40.21 支撑变压力</span></div>
+    <div class="level-bar"><span class="label">MA5</span><span class="price">39.68</span><span class="dist">↑3.9%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">MA20(关键!)</span><span class="price">40.21</span><span class="dist">↑5.3%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">筹码峰</span><span class="price">46.03</span><span class="dist">↑20.5%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">40-41</span> / <span class="stat-red">36.50</span></div>
+    <div class="stat-row"><span class="stat-label">⚠️ 注意</span><span class="stat-yellow">周一再跌→MACD死叉</span></div>
+  </div>
+
+  <!-- 工业富联 -->
+  <div class="card">
+    <div class="card-header"><span class="name">工业富联 <span class="code">601138</span></span><span class="badge badge-red">🔴 空头</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>65.311 → <span class="stat-red">57.590</span> (-11.88%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>28,795 / 16%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>跟机构，目标15%反弹</span></div>
+    <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-red">🔴 零下发散</span></div>
+    <div class="stat-row"><span class="stat-label">520战法</span><span class="stat-red">🔴 空头</span></div>
+    <div class="level-bar"><span class="label">今日最低</span><span class="price">56.82</span><span class="dist">↓1.3%</span><div class="bar bar-green"></div></div>
+    <div class="level-bar"><span class="label">MA5</span><span class="price">62.58</span><span class="dist">↑8.7%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">MA20(15%反弹)</span><span class="price">67.98</span><span class="dist">↑18%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">66</span> / <span class="stat-red">54.70</span></div>
+    <div class="stat-row"><span class="stat-label">盈亏比</span><span class="stat-green">风险5% / 回报15% = 3:1 ✅</span></div>
+  </div>
+
+  <!-- 天娱数科 -->
+  <div class="card">
+    <div class="card-header"><span class="name">天娱数科 <span class="code">002354</span></span><span class="badge badge-red">🔴 破位</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>7.964 → <span class="stat-red">7.160</span> (-10.16%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>17,184 / 9%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>老登股回暖，题材轮动</span></div>
+    <div class="stat-row"><span class="stat-label">形态</span><span class="stat-red">跌停破MA60！</span></div>
+    <div class="stat-row"><span class="stat-label">三天陷阱</span><span class="stat-red">7/16涨停→7/17跌停</span></div>
+    <div class="level-bar"><span class="label">今日最低</span><span class="price">7.16</span><span class="dist">↓0%</span><div class="bar bar-yellow"></div></div>
+    <div class="level-bar"><span class="label">MA5</span><span class="price">7.71</span><span class="dist">↑7.7%</span><div class="bar bar-red"></div></div>
+    <div class="level-bar"><span class="label">MA10</span><span class="price">8.03</span><span class="dist">↑12.2%</span><div class="bar bar-red"></div></div>
+    <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">7.80-8.00</span> / <span class="stat-red">6.80</span></div>
+    <div class="stat-row"><span class="stat-label">⚠️ 周一</span><span class="stat-red">低开破7.16=无支撑</span></div>
+  </div>
+
+  <!-- 盛和资源 -->
+  <div class="card" style="border-color:var(--red);">
+    <div class="card-header"><span class="name">🚨 盛和资源 <span class="code">600392</span></span><span class="badge badge-red">最深伤口</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>33.250 → <span class="stat-red">21.150</span> (-36.43%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>46,530 / 26%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>跟机构等中报催化剂</span></div>
+    <div class="stat-row"><span class="stat-label">形态</span><span class="stat-red">五连阴 + 破MA60</span></div>
+    <div class="mini-chart">前高 34.60 ━━━━━━━━━━━━━ 🔴
+筹码峰 31.66 ━━━━━━━━━ 🔴 主力出货
+MA20  27.36 ━━━━━━━━━ 🔴
+MA10  24.16 ━━━━━━━ 🔴
+MA5   23.10 ━━━━━━━ 🔴
+━━ 现价 21.15 ━━━━━ ⚔️
+20日低 21.05 ━━━━━━ 🟢
+120低 20.90 ━━━━━ 🚨 最后防线！
+下方无底 ⬇️</div>
+    <div class="stat-row"><span class="stat-label">🎯 中报反弹</span><span class="stat-green">23-24</span></div>
+    <div class="stat-row"><span class="stat-label">🚨 生命线</span><span class="stat-red">20.90！跌破=半年新低</span></div>
+    <div class="stat-row"><span class="stat-label">纪律</span><span>中报出来不管好坏都走</span></div>
+  </div>
+
+  <!-- 科创50 -->
+  <div class="card" style="border-color:var(--red);">
+    <div class="card-header"><span class="name">科创50 <span class="code">588000</span></span><span class="badge badge-orange">🚨 周一必须走</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>1.820 → <span class="stat-red">1.807</span> (-0.72%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>17,347 / 10%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>超跌博周一反弹</span></div>
+    <div class="stat-row"><span class="stat-label">量价</span><span class="stat-red">🔴 放量阴包阳(量比1.83)</span></div>
+    <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-red">🚨 DIF=0.016 临界</span></div>
+    <div class="stat-row"><span class="stat-label">芝士警告</span><span class="stat-red">"暂时远离双创"</span></div>
+    <div class="stat-row"><span class="stat-label">🎯 纪律</span><span class="stat-red">周一不管盈亏必须走</span></div>
+  </div>
+</div>
+
+<!-- ============ RISK MATRIX ============ -->
+<h2>📊 综合风险矩阵</h2>
+<div class="table-wrap">
+<table class="risk-matrix">
+  <tr><th>股票</th><th>仓位</th><th>520战法</th><th>MACD</th><th>均线</th><th>量价</th><th>逻辑面</th><th>综合</th></tr>
+  <tr><td>昭衍新药</td><td>29%</td><td>🟢多头</td><td>🟢零上金叉</td><td>🟢多头排列</td><td>🟡缩量</td><td>🟢CRO龙头</td><td><strong>⭐⭐⭐⭐</strong></td></tr>
+  <tr><td>埃斯顿</td><td>11%</td><td>🟡破MA5</td><td>🟡零上收敛</td><td>🟡站MA60远</td><td>🟡缩量</td><td>🟢机器人</td><td><strong>⭐⭐⭐</strong></td></tr>
+  <tr><td>央创ETF</td><td>28%</td><td>🔴空头</td><td>🔴零下</td><td>🔴空头</td><td>🟡正常</td><td>🟢防御</td><td><strong>⭐⭐⭐</strong></td></tr>
+  <tr><td>中证2000</td><td>28%</td><td>🔴空头</td><td>🔴零下</td><td>🔴空头</td><td>🔴放量</td><td>🟢左侧</td><td><strong>⭐⭐⭐</strong></td></tr>
+  <tr><td>中国船舶</td><td>19%</td><td>🔴空头</td><td>🔴零下</td><td>🟡混乱</td><td>🟡正常</td><td>🟢造船</td><td><strong>⭐⭐⭐</strong></td></tr>
+  <tr><td>工业富联</td><td>16%</td><td>🔴空头</td><td>🔴零下发散</td><td>🔴全破</td><td>🔴放量跌</td><td>🟡等反弹</td><td><strong>⭐⭐</strong></td></tr>
+  <tr><td>天娱数科</td><td>9%</td><td>🔴空头</td><td>🔴零下</td><td>🔴全破MA60</td><td>🔴缩量跌停</td><td>🟡题材</td><td><strong>⭐⭐</strong></td></tr>
+  <tr><td>盛和资源</td><td>26%</td><td>🔴空头</td><td>🔴零下发散</td><td>🔴五连阴</td><td>🔴缩量阴跌</td><td>🟡中报催化</td><td><strong>⭐</strong></td></tr>
+  <tr><td>科创50</td><td>10%</td><td>🔴空头</td><td>🚨临界</td><td>🔴阴包阳</td><td>🔴放量</td><td>⚠️周一走</td><td><strong>—</strong></td></tr>
+</table>
+</div>
+
+<!-- ============ MONDAY CHECKLIST ============ -->
+<h2>📋 周一操作清单</h2>
+<ul class="checklist">
+  <li class="p0"><strong>🚨 P0</strong> · 科创50 588000 <strong>必须走</strong> — 超跌博反弹纪律，周一不管盈亏</li>
+  <li class="p1"><strong>🔴 P1</strong> · 盛和资源 600392 <strong>盯20.90</strong> — 跌破=半年新低，考虑止损；不破则等中报</li>
+  <li class="p1"><strong>🔴 P1</strong> · 天娱数科 002354 <strong>盯7.16</strong> — 低开破位减半仓；若反弹至7.80可减仓</li>
+  <li class="p2"><strong>🟡 P2</strong> · 昭衍新药 603127 <strong>盯MA20(41.38)</strong> — 不破继续持有；破位减仓</li>
+  <li class="p2"><strong>🟡 P2</strong> · 工业富联 601138 <strong>看能否止跌</strong> — 反弹到66附近是减仓窗口</li>
+  <li class="p2"><strong>🟡 P2</strong> · 埃斯顿 002747 <strong>防MACD死叉</strong> — 周一不能续跌，反弹到40附近减仓</li>
+</ul>
+
+<!-- ============ FUNDS ============ -->
+<h2>🏛️ 基金层</h2>
+<div class="card">
+  <table class="risk-matrix">
+    <tr><th>基金</th><th>金额</th><th>方向</th><th>与股票重叠</th></tr>
+    <tr><td>银河创新成长混合C</td><td>3万</td><td>科技成长</td><td>⚠️ 与工业富联/埃斯顿/科创50重叠</td></tr>
+    <tr><td>华夏中证动漫游戏ETF联接C</td><td>2万</td><td>游戏动漫</td><td>⚠️ 与天娱数科同向</td></tr>
+    <tr><td>方正富邦核心优势混合C</td><td>4万</td><td>混合</td><td>待查具体持仓</td></tr>
+    <tr><td>纳指100相关</td><td>~5万</td><td>美股科技</td><td>✅ 分散A股风险</td></tr>
+  </table>
+</div>
+
+<!-- ============ MARKET CONTEXT ============ -->
+<h2>🌍 当前市场定位</h2>
+<div class="card">
+  <div class="stat-row"><span class="stat-label">芝士判断</span><span>牛市后半段，风控第一优先级</span></div>
+  <div class="stat-row"><span class="stat-label">核心矛盾</span><span>科创50 200倍PE + 放量阴包阳</span></div>
+  <div class="stat-row"><span class="stat-label">防御方向</span><span>央企创新 + 中证2000左侧</span></div>
+  <div class="stat-row"><span class="stat-label">关键位</span><span>上证3900→3800→3700逐级防守</span></div>
+  <div class="stat-row"><span class="stat-label">总仓位参考</span><span>芝士建议3.5层，龙神实际约90%（含基金）</span></div>
+  <div class="stat-row"><span class="stat-label">7/17特征</span><span>银行+水电领涨 ↔ 科技血洗，防御性轮动确认</span></div>
+</div>
+
+<p style="text-align:center; color:var(--muted); margin-top:40px; padding-bottom:40px;">
+  🐉 龙神交易体系 · 基于 Mi姐文档 + 芝士的花园 · 2026.7.17<br>
+  体系文件：memory/trading-system.md · 持仓诊断：memory/portfolio-diagnosis.md
+</p>
+
+</div>
+</body>
+</html>
