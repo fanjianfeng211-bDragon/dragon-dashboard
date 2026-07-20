@@ -1544,6 +1544,8 @@ function closeHist() { document.getElementById('histModal').classList.remove('sh
 const STORAGE_KEY = 'dragon_portfolio';
 const LOG_KEY = 'dragon_trade_log';
 const CLOSED_KEY = 'dragon_closed';
+const VERSION_KEY = 'dragon_version';
+const CURRENT_VERSION = '2026-07-20';
 
 let portfolioStocks = [];
 let closedPositions = [];
@@ -1565,11 +1567,18 @@ const defaultStocks = [
 ];
 
 function loadPortfolio() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) { portfolioStocks = JSON.parse(saved); }
-    else { portfolioStocks = JSON.parse(JSON.stringify(defaultStocks)); }
-  } catch(e) { portfolioStocks = JSON.parse(JSON.stringify(defaultStocks)); }
+  const savedVersion = localStorage.getItem(VERSION_KEY);
+  if (savedVersion === CURRENT_VERSION) {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) { portfolioStocks = JSON.parse(saved); }
+    } catch(e) { portfolioStocks = JSON.parse(JSON.stringify(defaultStocks)); }
+  } else {
+    // Version changed — reset to latest defaults
+    portfolioStocks = JSON.parse(JSON.stringify(defaultStocks));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioStocks));
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+  }
   try {
     closedPositions = JSON.parse(localStorage.getItem(CLOSED_KEY) || '[]');
     tradeLog = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
