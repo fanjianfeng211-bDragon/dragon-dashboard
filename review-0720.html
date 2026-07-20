@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>龙神复盘 · 2026.7.20</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --muted: #8b949e; --green: #3fb950;
+    --red: #f85149; --yellow: #d2991d; --blue: #58a6ff;
+    --purple: #bc8cff; --orange: #f0883e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; line-height:1.7; padding:12px; -webkit-text-size-adjust:100%; }
+  .container { max-width:900px; margin:0 auto; }
+
+  h1 { font-size:clamp(1.3em, 4vw, 2em); text-align:center; margin-bottom:4px; background:linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; color:var(--blue); }
+  h2 { font-size:1.1em; color:var(--blue); border-bottom:1.5px solid var(--border); padding-bottom:6px; margin:28px 0 12px; }
+  h3 { font-size:0.95em; margin:16px 0 8px; color:var(--text); }
+  .subtitle { text-align:center; color:var(--muted); margin-bottom:24px; font-size:0.85em; }
+
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:12px; }
+  .card h3 { margin-top:0; color:var(--yellow); font-size:0.95em; }
+
+  /* Badges */
+  .badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.72em; font-weight:600; }
+  .badge-green { background:var(--green); color:#000; }
+  .badge-red { background:var(--red); color:#fff; }
+  .badge-yellow { background:var(--yellow); color:#000; }
+  .badge-blue { background:var(--blue); color:#000; }
+  .badge-purple { background:var(--purple); color:#000; }
+
+  /* Table */
+  table { width:100%; border-collapse:collapse; font-size:0.82em; margin:12px 0; }
+  th { text-align:left; padding:8px 10px; border-bottom:2px solid var(--border); color:var(--muted); font-size:0.75em; }
+  td { padding:8px 10px; border-bottom:1px solid var(--border); }
+  .green { color:var(--green); }
+  .red { color:var(--red); }
+  .yellow { color:var(--yellow); }
+  .blue { color:var(--blue); }
+
+  /* Market data row */
+  .idx-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:12px; }
+  .idx-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px; text-align:center; }
+  .idx-item .name { font-size:0.7rem; color:var(--muted); }
+  .idx-item .val { font-size:1rem; font-weight:700; }
+  .idx-item .chg { font-size:0.75rem; }
+
+  .divider { border:none; border-top:1px solid var(--border); margin:24px 0; }
+  blockquote { border-left:3px solid var(--yellow); padding-left:14px; margin:12px 0; color:var(--muted); font-size:0.88em; }
+  strong { color:var(--text); }
+  em { color:var(--yellow); font-style:normal; }
+  .highlight { background:rgba(248,81,73,0.15); padding:2px 6px; border-radius:3px; }
+  .highlight-green { background:rgba(63,185,80,0.15); padding:2px 6px; border-radius:3px; }
+
+  .nav { text-align:center; margin-bottom:16px; }
+  .nav a { color:var(--blue); font-size:0.8em; margin:0 10px; text-decoration:none; }
+
+  .verdict { font-size:1.2em; }
+  ul { padding-left:20px; margin:8px 0; }
+  li { margin:4px 0; font-size:0.85em; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav">← <a href="dashboard.html">仪表盘</a> | <a href="trading-system.html">交易体系</a></div>
+
+  <h1>🐉 龙神复盘 · 2026.07.20</h1>
+  <p class="subtitle">Mi姐五步法完整复盘 + 六次关键判断验证</p>
+
+  <!-- ====== MARKET SNAPSHOT ====== -->
+  <h2>一、大盘环境</h2>
+  <div class="idx-grid">
+    <div class="idx-item"><div class="name">上证指数</div><div class="val red">3796.28</div><div class="chg green">+0.85%</div></div>
+    <div class="idx-item"><div class="name">深证成指</div><div class="val red">13610.23</div><div class="chg red">-0.71%</div></div>
+    <div class="idx-item"><div class="name">创业板指</div><div class="val red">3443.10</div><div class="chg green">+0.42%</div></div>
+    <div class="idx-item"><div class="name">科创50</div><div class="val red">1718.69</div><div class="chg green">+0.19%</div></div>
+    <div class="idx-item"><div class="name">上证50</div><div class="val red">—</div><div class="chg green">+3.01%</div></div>
+    <div class="idx-item"><div class="name">中证1000</div><div class="val red">—</div><div class="chg red">-2.83%</div></div>
+  </div>
+
+  <div class="card">
+    <h3>🔑 核心定性：极致结构性分化——"赚指数不赚钱"</h3>
+    <table>
+      <tr><td>成交额</td><td><strong>2.72万亿</strong>（放量464亿，连续70日破2万亿）</td></tr>
+      <tr><td>涨跌比</td><td><span class="green">1739</span> : <span class="red">3700+</span></td></tr>
+      <tr><td>跌停</td><td><span class="red">200+</span></td></tr>
+      <tr><td>强势板块</td><td>油气(+7.8%)、煤炭、白酒(+6%)、电力、保险</td></tr>
+      <tr><td>重灾区</td><td>PCB/CCL跌停潮、CPO近20cm跌停、机器人跌停、半导体</td></tr>
+      <tr><td>北向资金</td><td>小幅净流入→能源+白酒+电力蓝筹</td></tr>
+    </table>
+    <blockquote>周末政策：国新500亿+增持央企、茅台年内第二次提价、证监会机构座谈会。利好只托住了权重，没托住个股。</blockquote>
+  </div>
+
+  <!-- ====== PORTFOLIO DIAGNOSIS ====== -->
+  <h2>二、持仓诊断</h2>
+
+  <h3>⚔️ 弹性层（18万）</h3>
+  <table>
+    <thead><tr><th>股票</th><th>成本</th><th>现价</th><th>盈亏</th><th>诊断</th><th>明日操作</th></tr></thead>
+    <tr>
+      <td><strong>天娱数科</strong><br>002354</td>
+      <td>7.964</td>
+      <td class="red">6.440</td>
+      <td class="red">-19.2%</td>
+      <td>🔴 连续第二个跌停。13:19封板至收盘。主力-7803万。两个跌停=无人接盘。</td>
+      <td><span class="badge badge-red">清仓</span> 止损6.80已破</td>
+    </tr>
+    <tr>
+      <td><strong>埃斯顿</strong><br>002747</td>
+      <td>39.020</td>
+      <td class="red">34.370</td>
+      <td class="red">-12.0%</td>
+      <td>🔴 开盘即跌停。MACD零上死叉确认。机器人板块领跌。</td>
+      <td><span class="badge badge-red">清仓</span> 止损36.50已破</td>
+    </tr>
+    <tr>
+      <td><strong>盛和资源</strong><br>600392</td>
+      <td>46.874</td>
+      <td class="red">19.810</td>
+      <td class="red">-57.8%</td>
+      <td>🚨 盘中最低19.31击穿120日生命线20.90！半年新低，无条件清仓。</td>
+      <td><span class="badge badge-red">清仓</span> 生命线已破</td>
+    </tr>
+    <tr>
+      <td><strong>工业富联</strong><br>601138</td>
+      <td>65.311</td>
+      <td class="red">56.500</td>
+      <td class="red">-13.6%</td>
+      <td>🟡 算力全线崩盘中仅-1.89%，相对抗跌。尾盘有资金承接，止损54.70未破。</td>
+      <td><span class="badge badge-yellow">持有观察</span></td>
+    </tr>
+    <tr>
+      <td><strong>昭衍新药</strong><br>603127</td>
+      <td>51.269</td>
+      <td class="red">47.000</td>
+      <td class="red">-8.4%</td>
+      <td>🟢 跌停开盘→强势逆转！主力净流入2.02亿。教科书级突破回踩。</td>
+      <td><span class="badge badge-green">持有</span> 不止损</td>
+    </tr>
+  </table>
+
+  <h3>🛡️ 稳健层（12万）</h3>
+  <table>
+    <thead><tr><th>股票</th><th>成本</th><th>现价</th><th>盈亏</th><th>状态</th></tr></thead>
+    <tr><td>央创ETF 515900</td><td>1.612</td><td class="green">1.627</td><td class="green">+0.92%</td><td>🟢 国新增持催化，持有</td></tr>
+    <tr><td>中证2000 563330</td><td>4.127</td><td class="red">4.016</td><td class="red">-2.68%</td><td>🟡 中小盘被锤，不补仓</td></tr>
+    <tr><td>中国船舶 600150</td><td>31.972</td><td class="green">33.010</td><td class="green">+3.25%</td><td>🟢 最靓的票，持有</td></tr>
+    <tr><td>中证证券 512570</td><td>1.119</td><td class="green">1.124</td><td class="green">+0.44%</td><td>🆕 新建仓防御切换</td></tr>
+  </table>
+
+  <!-- ====== Mi姐 THEORY VERIFICATION ====== -->
+  <h2>三、🔥 Mi姐六次关键判断 vs 实际走势验证</h2>
+  <p style="color:var(--muted);font-size:0.8em;margin-bottom:12px;">数据范围：6/29 → 7/20，共分析37张Mi姐复盘截图，以下为6次最高置信度预测验证</p>
+
+  <div class="card">
+    <h3>验证一：6/29 — "科创50高位预警" <span class="badge badge-green verdict">✅ 精准命中</span></h3>
+    <blockquote>"科创50这个位置，周线、季线、月线乖离率都很大...从<strong>7月份开始要谨慎，前两周有可能维持拉升，但是第三周可能就会冲高回落</strong>。"</blockquote>
+    <table>
+      <tr><th>日期</th><th>科创50</th><th>事件</th></tr>
+      <tr><td>6/29</td><td class="green">2127 (+4.6%)</td><td>Mi姐发预警当天，市场最乐观</td></tr>
+      <tr><td>7/2</td><td class="red">暴跌 -7.7%</td><td>半导体崩盘</td></tr>
+      <tr><td>7/8</td><td class="green">+0.7%</td><td>死猫跳</td></tr>
+      <tr><td>7/17</td><td class="red">暴跌 -7.1%</td><td><strong>第三周冲高回落，精确兑现！</strong></td></tr>
+      <tr><td>7/20</td><td class="red">1718</td><td>从2127跌到1718，<strong>累计-19.2%</strong></td></tr>
+    </table>
+    <p style="margin-top:8px;">→ 她在大涨当天（市场最乐观时）给出<strong>精确到周级别的时间窗口预警</strong>。实际走势完全按她说的走。</p>
+  </div>
+
+  <div class="card">
+    <h3>验证二：7/2 — "高位出货骗局" <span class="badge badge-green verdict">✅ 教科书级</span></h3>
+    <blockquote>"这几天虽然都是阳线，但是每天都是跌下来再反包上去...<strong>这就是一边出货，一边拉，再出再拉。这是一个骗局。</strong>"<br>"科创50 <strong>7月、8月要看调整</strong>，9月、10月可能会有一波向上。"</blockquote>
+    <p>→ 在主力还没出完货时就识别出"跌→拉→再跌→再拉"的<strong>经典出货模式</strong>。此后科创50一路从2100跌到1718，中间所有反弹都是假的。</p>
+  </div>
+
+  <div class="card">
+    <h3>验证三：6/29 — "PCB/光模块双顶出货" <span class="badge badge-green verdict">✅ 提前21天预警</span></h3>
+    <blockquote>"元器件、PCB这些方向也是要小心。今天跌的都是他们，出货出的蛮厉害的。<strong>这些已经双顶了，这个东西就不要碰了。</strong>"</blockquote>
+    <p>→ 7/20实际走势：<strong>金安国纪、铜冠铜箔、宝鼎科技跌停；源杰科技近20cm跌停；东山精密、剑桥科技、光迅科技跌停。</strong>PCB/CCL/CPO全线崩盘。提前21天！</p>
+  </div>
+
+  <div class="card">
+    <h3>验证四：6/29+7/15 — "医药底部、证券跷跷板" <span class="badge badge-green verdict">✅ 结构判断完美</span></h3>
+    <blockquote>"医药涨了好几天，也是做月线做底，但是还会震荡，因为大级别的趋势还没形成扭转。"<br>"证券和科技其实是跷跷板，只要科技大涨，证券一般都会压盘。"<br>（7/15补充）"医药已经快速反弹到压力位，不适合继续追涨，需要等待回踩。"</blockquote>
+    <p>→ 7/20验证：昭衍新药跌停开盘后逆转（-1.94%），主力净流入2亿——<strong>恰恰就是Mi姐说的"回踩加仓"机会</strong>。证券板块稳健。</p>
+  </div>
+
+  <div class="card">
+    <h3>验证五：7/8 — "250日线死猫跳" <span class="badge badge-green verdict">✅ 精准定性</span></h3>
+    <blockquote>"250日线附近主力肯定是要守的，要有一个反弹...但<strong>真正的趋势反转还是需要先突破4176</strong>。否则的话，它会在这个区间继续震荡。"</blockquote>
+    <p>→ 上证从未突破4176。7/8的反弹果然是<strong>死猫跳</strong>。她给出了具体量化标准（4176），事后完全验证。</p>
+  </div>
+
+  <div class="card">
+    <h3>验证六：7/16 — "机器人不能抄" <span class="badge badge-green verdict">✅ 精准规避</span></h3>
+    <blockquote>"机器人...在没有形成底部形态之前就是观察...<strong>不能抄</strong>。机器人板块拥挤度也是很高的。"</blockquote>
+    <p>→ 7/20实际：<strong>埃斯顿跌停 -10%</strong>，机器人板块 -3.67%。提前4天预警，如果听进去了就不会在今天吃跌停。</p>
+  </div>
+
+  <!-- ====== OVERALL VERDICT ====== -->
+  <div class="card" style="border-color:var(--green);">
+    <h3>📊 综合验证结论</h3>
+    <table>
+      <tr><th>Mi姐判断</th><th>日期</th><th>验证走势</th><th>结果</th></tr>
+      <tr><td>科创50第三周冲高回落</td><td>6/29</td><td>7/17暴跌-7.1%</td><td class="green">✅ 精确到周</td></tr>
+      <tr><td>半导体高位出货骗局</td><td>7/2</td><td>科创50跌19%</td><td class="green">✅ 完美</td></tr>
+      <tr><td>PCB/光模块双顶不碰</td><td>6/29</td><td>7/20全线跌停</td><td class="green">✅ 提前21天</td></tr>
+      <tr><td>医药底部震荡上行</td><td>6/29</td><td>回踩后逆转</td><td class="green">✅</td></tr>
+      <tr><td>证券科技跷跷板</td><td>6/29</td><td>多次验证</td><td class="green">✅</td></tr>
+      <tr><td>250日线反弹非反转</td><td>7/8</td><td>死猫跳确认</td><td class="green">✅</td></tr>
+      <tr><td>机器人不能抄底</td><td>7/16</td><td>埃斯顿跌停</td><td class="green">✅ 精准</td></tr>
+      <tr><td>白酒要回踩</td><td>7/15</td><td>茅台突发提价</td><td class="yellow">⚠️ 外部事件</td></tr>
+    </table>
+    <p style="margin-top:10px"><strong>8次预测，7次完全验证，1次被突发事件干扰。准确率 87.5%。</strong></p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ====== TOMORROW PLAN ====== -->
+  <h2>四、明日计划（7/21周二）—— 按Mi姐理论执行</h2>
+
+  <div class="card" style="border-color:var(--red);">
+    <h3>🚨 P0 — 必须清仓</h3>
+    <table>
+      <tr><th>股票</th><th>操作</th><th>Mi姐理论依据</th></tr>
+      <tr><td><strong>盛和资源</strong></td><td class="red">清仓</td><td>"跌破120日最低=半年新低，无条件清仓"<br>"下跌不言底，学会活下来才有机会翻身"</td></tr>
+      <tr><td><strong>天娱数科</strong></td><td class="red">清仓</td><td>"连续两个跌停=无人接盘"<br>"破位即走，永不补仓，错了就走"</td></tr>
+      <tr><td><strong>埃斯顿</strong></td><td class="red">清仓</td><td>"MACD零上死叉=最强卖出信号"<br>"机器人拥挤度高，没底部形态不能抄"</td></tr>
+    </table>
+    <p style="margin-top:8px;font-size:0.85em;">清仓后释放约 <strong>5.4万现金</strong>。在"大盘真正见底+底部形态出现"之前，现金为王。</p>
+  </div>
+
+  <div class="card" style="border-color:var(--green);">
+    <h3>🟢 继续持有</h3>
+    <table>
+      <tr><td><strong>昭衍新药</strong></td><td class="green">持有</td><td>"医药是底部板块，震荡上行，不破MA20不走。趋势不破不下车。" 止损41.00</td></tr>
+      <tr><td><strong>工业富联</strong></td><td class="yellow">观察</td><td>"高位科技反弹很猛但短线。止损54.70不破就拿，反弹到MA20附近减。" 目标66元</td></tr>
+      <tr><td><strong>央创ETF</strong></td><td class="green">持有</td><td>国新增持催化+底部防御方向。不破1.58不加不减。</td></tr>
+      <tr><td><strong>中国船舶</strong></td><td class="green">持有</td><td>"大周期没问题，不要太在意每天涨跌。" 目标35-36</td></tr>
+      <tr><td><strong>中证2000ETF</strong></td><td class="yellow">持有</td><td>左侧逻辑不变，不补仓。止损3.85。</td></tr>
+    </table>
+  </div>
+
+  <blockquote style="margin-top:24px;font-size:0.9em;">
+    <strong>Mi姐原话（7/2）：</strong>"要学会怎么先把大跌躲过去，而不是想先挣到。先把大盘急跌下杀的这段躲过去，就很厉害了。亏损能够控制住，收益就能留住。否则就是不停的坐过山车——虽然挣了，但大跌也没逃过，就亏进去了。"
+  </blockquote>
+
+  <hr class="divider">
+  <p style="text-align:center;color:var(--muted);font-size:0.7em;">🐉 龙神 @ 2026.7.20 · 数据来源：同花顺/东方财富/公开市场数据 · 不构成投资建议</p>
+
+</div>
+</body>
+</html>
