@@ -682,12 +682,12 @@ function getMarketStatus() {
   return 'closed';
 }
 
-const SINA_CODES = ['sh601138','sh600392','sz002747','sz002354','sh603127','sh515900','sh563330','sh600150','sh512570','sh512800'];
+const SINA_CODES = ['sh601138','sh600392','sh603127','sh600587','sh588170','sh515900','sh563330','sh600150','sh512570','sh512800'];
 const INDEX_CODES = ['s_sh000001','s_sz399001','s_sh000688','s_sz399006'];
 const ALL_CODES = [...INDEX_CODES, ...SINA_CODES];
 
 const CODE_TO_ID = {
-  'sh601138':'601138','sh600392':'600392','sz002747':'002747','sz002354':'002354','sh603127':'603127',
+  'sh601138':'601138','sh600392':'600392','sh603127':'603127','sh600587':'600587','sh588170':'588170',
   'sh515900':'515900','sh563330':'563330','sh600150':'600150','sh512570':'512570','sh512800':'512800',
   's_sh000001':'000001','s_sz399001':'399001','s_sh000688':'000688','s_sz399006':'399006'
 };
@@ -1388,7 +1388,7 @@ const STORAGE_KEY = 'dragon_portfolio';
 const LOG_KEY = 'dragon_trade_log';
 const CLOSED_KEY = 'dragon_closed';
 const VERSION_KEY = 'dragon_version';
-const CURRENT_VERSION = '2026-07-20';
+const CURRENT_VERSION = '2026-07-21';
 
 let portfolioStocks = [];
 let closedPositions = [];
@@ -1396,17 +1396,17 @@ let tradeLog = [];
 
 const defaultStocks = [
   // ===== 稳健层 12w =====
-  { id:"zqzs", name:"央创ETF", code:"515900", shares:21300, cost:1.612, price:1.627, pnl:314.50, pnlPct:0.916, mktVal:34655.10, sector:"央企创新", pe:null, fundFlow:null, intraday:null, support:1.58, resistance:"1.72-1.75", advice:"🟢持有 国新增持催化 芝士防御推荐 止损1.55" },
-  { id:"zz2000", name:"中证2000ETF", code:"563330", shares:8300, cost:4.127, price:4.016, pnl:-918.00, pnlPct:-2.680, mktVal:33332.80, sector:"小盘指数", pe:null, fundFlow:null, intraday:null, support:3.85, resistance:"4.40-4.50", advice:"🟡持有 左侧小盘逻辑 不补仓 等缩量企稳" },
-  { id:"zgcb", name:"中国船舶", code:"600150", shares:700, cost:31.972, price:33.010, pnl:726.27, pnlPct:3.245, mktVal:23107.00, sector:"军工造船", pe:null, fundFlow:null, intraday:null, support:30.50, resistance:"35-36", advice:"🟢全仓最佳 Mi姐：大周期没问题 目标35-36" },
-  { id:"zqzs2", name:"中证证券", code:"512570", shares:7000, cost:1.119, price:1.124, pnl:34.61, pnlPct:0.442, mktVal:7868.00, sector:"券商ETF", pe:null, fundFlow:null, intraday:null, support:null, resistance:null, advice:"🆕新仓 防御切换 Mi姐：证券科技跷跷板" },
-  { id:"yhETF", name:"银行ETF", code:"512800", shares:100, cost:0.804, price:0.808, pnl:0.40, pnlPct:0.498, mktVal:80.80, sector:"银行ETF", pe:null, fundFlow:null, intraday:null, support:null, resistance:null, advice:"🆕试仓 银行护盘方向" },
+  { id:"zqzs", name:"央创ETF", code:"515900", shares:21300, cost:1.6122, price:1.646, pnl:719.20, pnlPct:2.094, mktVal:35059.80, sector:"央企创新", support:1.58, resistance:"1.72-1.75", advice:"🟢持有 国新增持催化 今日+1.17%" },
+  { id:"zz2000", name:"中证2000ETF", code:"563330", shares:8300, cost:4.1266, price:4.141, pnl:119.50, pnlPct:0.349, mktVal:34370.30, sector:"小盘指数", support:3.85, resistance:"4.40-4.50", advice:"🟢今日+3.11%反弹 左侧逻辑不变" },
+  { id:"zgcb", name:"中国船舶", code:"600150", shares:700, cost:31.9725, price:32.96, pnl:691.27, pnlPct:3.089, mktVal:23072.00, sector:"军工造船", support:30.50, resistance:"35-36", advice:"🟢持有 Mi姐：大周期没问题" },
+  { id:"zqzs2", name:"证券ETF", code:"512570", shares:7000, cost:1.1191, price:1.129, pnl:69.61, pnlPct:0.889, mktVal:7903.00, sector:"券商ETF", advice:"🟢持有 今日+0.44%" },
+  { id:"yhETF", name:"银行ETF", code:"512800", shares:100, cost:0.804, price:0.790, pnl:-1.40, pnlPct:-1.741, mktVal:79.00, sector:"银行ETF", advice:"试仓 银行今日回调" },
   // ===== 弹性层 18w =====
-  { id:"zyxy", name:"昭衍新药", code:"603127", shares:1100, cost:51.269, price:47.000, pnl:-4728.13, pnlPct:-8.384, mktVal:51700.00, sector:"CRO/猴模块", pe:null, fundFlow:"+2.02亿", intraday:null, support:41.00, resistance:"53-55", advice:"🟢持有！跌停开盘→逆转 主力净流入2亿 全仓唯一多头排列 止损41" },
-  { id:"gyfl", name:"工业富联", code:"601138", shares:500, cost:65.311, price:56.500, pnl:-4424.74, pnlPct:-13.550, mktVal:28250.00, sector:"AI服务器", pe:26.46, fundFlow:"-2.68亿", intraday:null, support:54.70, resistance:"66", advice:"🟡观察 算力崩盘中仅-1.89%抗跌 中金看好Rubin机柜 目标66 止损54.70" },
-  { id:"shzy", name:"盛和资源", code:"600392", shares:1100, cost:46.874, price:19.810, pnl:-29786.95, pnlPct:-57.769, mktVal:21791.00, sector:"稀土", pe:26.52, fundFlow:null, intraday:null, support:"🚨已破", resistance:"—", advice:"🚨明日清仓！击穿120日生命线20.90 半年新低 无条件走 Mi姐：下跌不言底" },
-  { id:"asd", name:"埃斯顿", code:"002747", shares:500, cost:39.020, price:34.370, pnl:-2338.59, pnlPct:-11.987, mktVal:17185.00, sector:"机器人", pe:255, fundFlow:"-4.72亿", intraday:null, support:32.93, resistance:null, advice:"🚨明日清仓！MACD零上死叉 机器人领跌 止损36.50已破 Mi姐：不能抄" },
-  { id:"tykc", name:"天娱数科", code:"002354", shares:2400, cost:7.964, price:6.440, pnl:-3669.73, pnlPct:-19.200, mktVal:15456.00, sector:"游戏/AI", pe:88, fundFlow:"-7803万", intraday:null, support:"6.05", resistance:null, advice:"🚨明日清仓！连续两个跌停 止损6.80已破 Mi姐：破位即走不补仓" }
+  { id:"zyxy", name:"昭衍新药", code:"603127", shares:1400, cost:50.6877, price:49.12, pnl:-2237.59, pnlPct:-3.153, mktVal:68768.00, sector:"CRO/猴模块", fundFlow:"-6795万", support:41.00, resistance:"53-55", advice:"🟢加仓至1400 今日+4.51% 全仓唯一多头 止损41" },
+  { id:"gyfl", name:"工业富联", code:"601138", shares:500, cost:65.3107, price:60.98, pnl:-2185.94, pnlPct:-6.694, mktVal:30490.00, sector:"AI服务器", fundFlow:"+11.02亿", support:54.70, resistance:"66", advice:"🟢今日+7.93%大涨！主力净流入11亿 科技反攻 目标66" },
+  { id:"shzy", name:"盛和资源", code:"600392", shares:1100, cost:46.8743, price:21.43, pnl:-28005.78, pnlPct:-54.315, mktVal:23573.00, sector:"稀土", fundFlow:"+8961万", support:"19.60", resistance:"24", advice:"🟡今日+8.18%强势反弹 主力+8961万 未清仓等回血" },
+  { id:"xhyl", name:"新华医疗", code:"600587", shares:1100, cost:13.2447, price:12.96, pnl:-325.46, pnlPct:-2.234, mktVal:14256.00, sector:"医疗器械", support:"12.93", resistance:"13.39", advice:"🆕新仓 医疗器械底部布局" },
+  { id:"kcbdt", name:"科创半导体ETF", code:"588170", shares:100, cost:1.0855, price:1.07, pnl:-6.55, pnlPct:-6.034, mktVal:107.00, sector:"半导体ETF", advice:"🆕试仓 科创50暴涨+10.73%日" }
 ];
 
 function loadPortfolio() {
@@ -1682,7 +1682,7 @@ const FACTOR_WEIGHTS = { industry: 0.35, fundMgr: 0.25, blogger: 0.20, luHist: 0
 
 function scoreIndustry(stock) {
   const code = stock.code; let score = 0;
-  const tier1 = ['603127','600150'], tier2 = ['601138','515900'], tier3 = ['563330','512570'], tier4 = ['600392','002747','002354'], tier5 = ['512800'];
+  const tier1 = ['603127','600150'], tier2 = ['601138','515900'], tier3 = ['563330','512570','600587'], tier4 = ['600392','588170'], tier5 = ['512800'];
   if (tier1.includes(code)) score = 95;
   else if (tier2.includes(code)) score = 85;
   else if (tier3.includes(code)) score = 70;
@@ -1697,7 +1697,7 @@ function scoreFundMgr(stock) {
   const code = stock.code; let score = 50;
   const strongBuy = ['601138','603127']; // 工业富联(中金看好), 昭衍新药(浙商证券看好)
   const moderateBuy = ['600150','515900']; // 中国船舶(造船周期), 央创ETF(国新增持)
-  const noCoverage = ['600392','002747','002354']; // 清仓标的
+  const noCoverage = ['600392','588170']; // 清仓标的
   if (strongBuy.includes(code)) score = 90;
   else if (moderateBuy.includes(code)) score = 70;
   else if (noCoverage.includes(code)) score = 30;
