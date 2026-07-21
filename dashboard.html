@@ -3,21 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>龙神 · 交易仪表盘 v4.0</title>
+<title>龙神 · 交易仪表盘 v5.0</title>
 <style>
 :root {
-  --bg: #ffffff;
-  --card: #f6f8fa;
-  --border: #d0d7de;
-  --text: #1f2328;
-  --dim: #656d76;
-  --up: #cf222e;
-  --down: #1a7f37;
-  --green: #1a7f37;
-  --red: #cf222e;
-  --accent: #0969da;
-  --gold: #9a6700;
-  --purple: #8250df;
+  --bg: #0d1117; --card: #161b22; --border: #30363d;
+  --text: #c9d1d9; --dim: #8b949e;
+  --up: #f85149; --down: #3fb950;
+  --green: #3fb950; --red: #f85149;
+  --accent: #58a6ff; --gold: #d2991d;
+  --purple: #bc8cff;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -100,14 +94,14 @@ body {
   display: inline-block; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px;
   margin-bottom: 6px; font-weight: 700; margin-right: 4px;
 }
-.tag.hot { background: #ffebe9; color: var(--red); }
-.tag.chip { background: #ddf4ff; color: var(--accent); }
-.tag.ai { background: #fbefff; color: var(--purple); }
-.tag.policy { background: #fff8c5; color: var(--gold); }
-.tag.ipo { background: #dafbe1; color: var(--green); }
-.tag.fund { background: #fff8c5; color: var(--gold); }
-.tag.chain { background: #ddf4ff; color: var(--accent); }
-.tag.risk { background: #ffebe9; color: var(--red); }
+.tag.hot { background: rgba(248,81,73,0.15); color: var(--red); }
+.tag.chip { background: rgba(88,166,255,0.15); color: var(--accent); }
+.tag.ai { background: rgba(188,140,255,0.15); color: var(--purple); }
+.tag.policy { background: rgba(210,153,29,0.15); color: var(--gold); }
+.tag.ipo { background: rgba(63,185,80,0.15); color: var(--green); }
+.tag.fund { background: rgba(210,153,29,0.15); color: var(--gold); }
+.tag.chain { background: rgba(88,166,255,0.15); color: var(--accent); }
+.tag.risk { background: rgba(248,81,73,0.15); color: var(--red); }
 .news-card h3 { font-size: 0.9rem; margin-bottom: 4px; line-height: 1.4; }
 .news-card p { font-size: 0.75rem; color: var(--dim); line-height: 1.5; }
 .news-card .affected { font-size: 0.65rem; margin-top: 6px; }
@@ -156,7 +150,7 @@ body {
 
 /* Expand detail */
 .stock-detail {
-  display: none; background: #f6f8fa; border: 1px solid var(--border);
+  display: none; background: var(--card); border: 1px solid var(--border);
   border-radius: 0 0 10px 10px; padding: 10px 14px; margin-top: -7px; margin-bottom: 6px;
   font-size: 0.7rem; color: var(--dim); line-height: 1.8;
 }
@@ -472,7 +466,7 @@ body {
 <body>
 
 <div class="header">
-  <h1>🐉 <span>龙神</span> · 交易仪表盘 <span style="font-size:0.5rem;color:var(--dim);">v4.0</span></h1>
+  <h1>🐉 <span>龙神</span> · 交易仪表盘 <span style="font-size:0.5rem;color:var(--dim);">v5.0</span></h1>
   <div class="date" id="dateDisplay"></div>
   <div style="margin-top:6px;font-size:0.7rem;">
     <a href="trading-system.html" style="color:var(--accent);margin:0 6px;">📐 交易体系</a>
@@ -501,75 +495,13 @@ body {
 
 <!-- Nav Tabs -->
 <div class="nav-tabs">
-  <div class="nav-tab active" onclick="switchTab('ops')">🎯 建议</div>
-  <div class="nav-tab" onclick="switchTab('portfolio')">📊 持仓</div>
+  <div class="nav-tab active" onclick="switchTab('portfolio')">📊 持仓</div>
   <div class="nav-tab" onclick="switchTab('news')">📰 资讯</div>
   <div class="nav-tab" onclick="switchTab('brief')">📋 盘面</div>
-  <div class="nav-tab" onclick="switchTab('notes')">📝 笔记</div>
-  <div class="nav-tab" onclick="switchTab('limitup')">🔥 涨停</div>
-  <div class="nav-tab" onclick="switchTab('score')">🍎 选股</div>
-  <div class="nav-tab" onclick="switchTab('verify')">🎯 验证</div>
 </div>
 
-<!-- ===== TAB 0: OPERATIONS ===== -->
-<div class="tab-content active" id="tab-ops">
-
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-  <div class="sec-title" style="margin:0;">🎯 智能操作建议</div>
-  <span style="font-size:0.65rem;color:var(--dim);" id="signalCount">0条建议</span>
-</div>
-<div id="opsList"></div>
-<div class="empty-state" id="opsEmpty" style="display:none;">✅ 当前无异常信号，持仓正常</div>
-
-<div class="sec-title">⚙️ 信号规则引擎</div>
-<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;" id="ruleList"></div>
-
-<div class="sec-title">🔌 添加规则（代码接口）</div>
-<div class="add-rule-form">
-  <textarea id="newRuleCode" placeholder="粘贴规则代码...&#10;&#10;// 规则模板：&#10;rules.push({&#10;  id: 'my_rule',&#10;  name: '自定义规则',&#10;  category: '自定义',&#10;  priority: 50,&#10;  evaluate(stock, market) {&#10;    return { signal:'sell', urgency:'high', reason:'触发原因', action:'建议操作' };&#10;  }&#10;});&#10;refreshAll();"></textarea>
-  <div class="form-hint">
-    💡 <b>可用数据字段</b>：<br>
-    <code>stock.pnlPct</code> 盈亏% | <code>stock.mktVal</code> 市值 | <code>stock.price/cost</code> 现价/成本<br>
-    <code>market.volume</code> 成交额 | <code>market.upDown</code> 涨跌比 | <code>market.leadingSector</code> 领涨板块<br>
-    <code>stock.fundFlow</code> 主力资金(接入中) | <code>stock.intraday</code> 分时数据(接入中)
-  </div>
-  <div class="note-actions" style="margin-top:8px;">
-    <button class="btn save" onclick="addCustomRule()">🔧 注入规则</button>
-    <button class="btn" onclick="resetRules()">↺ 重置默认</button>
-  </div>
-</div>
-
-</div>
-
-<!-- ===== TAB: LIMIT-UP BOARD ===== -->
-<div class="tab-content" id="tab-limitup">
-
-<div class="sec-title">🔥 涨停天梯榜 <span id="luDate" style="font-size:0.65rem;color:var(--dim);font-weight:400;"></span></div>
-<div class="lu-board" id="luTiers"></div>
-
-<div class="sec-title">💰 主力净流入板块</div>
-<div id="luFlowList" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
-
-<div class="sec-title">🔍 历史回溯 · 相似逻辑推荐</div>
-<div id="luMatches"></div>
-<div class="empty-state" id="luMatchEmpty">点击涨停股标签查看历史相似逻辑</div>
-
-<div class="sec-title">📋 AI产业链历史涨停库</div>
-<div style="font-size:0.7rem;color:var(--dim);margin-bottom:6px;">选取涨停催化剂匹配相似逻辑</div>
-<div id="luHistTags" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;"></div>
-<div id="luHistList"></div>
-
-<div class="hist-modal" id="histModal" onclick="closeHist()">
-  <div class="hist-content" onclick="event.stopPropagation()">
-    <button class="hist-close" onclick="closeHist()">✕</button>
-    <div id="histDetail"></div>
-  </div>
-</div>
-
-</div>
-
-<!-- ===== TAB 1: PORTFOLIO ===== -->
-<div class="tab-content" id="tab-portfolio">
+<!-- ===== TAB: PORTFOLIO + SCORING ===== -->
+<div class="tab-content active" id="tab-portfolio">
 
 <div class="summary">
   <div class="sum-card"><div class="label">总市值</div><div class="value" id="sumMktVal">—</div><div class="sub" id="sumCount">—</div></div>
@@ -610,32 +542,18 @@ body {
 <div class="sec-title">📋 今日盘面速览</div>
 <div id="briefContainer"><div class="empty-state">加载中...</div></div>
 
-<div class="sec-title">🗓️ 近期事件</div>
-<div class="brief-item"><span class="b-label">12批药品集采</span><span class="b-val">65品种纳入</span></div>
-<div class="brief-item"><span class="b-label">矿产资源条例</span><span class="b-val">6/15起施行</span></div>
-<div class="brief-item"><span class="b-label">BIO2026大会</span><span class="b-val">美国圣地亚哥</span></div>
+<div class="sec-title">🔥 涨停天梯 <span id="luDate" style="font-size:0.65rem;color:var(--dim);font-weight:400;"></span></div>
+<div class="lu-board" id="luTiers"></div>
+<div id="luFlowList" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;"></div>
 
-</div>
+<div class="sec-title">📋 涨停历史库</div>
+<div id="luHistTags" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;"></div>
+<div id="luHistList"></div>
 
-<!-- ===== TAB 4: NOTES ===== -->
-<div class="tab-content" id="tab-notes">
-
-<div class="sec-title">📝 交易笔记</div>
-<div class="note-area">
-  <textarea id="noteText" placeholder="写点什么...&#10;&#10;例如：&#10;- 盛和资源清仓&#10;- 天娱数科清仓&#10;- 埃斯顿清仓&#10;- 昭衍新药持有观察&#10;- 明天关注大盘见底信号"></textarea>
-  <div class="note-actions">
-    <button class="btn" onclick="clearNotes()">清空</button>
-    <button class="btn save" onclick="saveNotes()">💾 保存</button>
-  </div>
-</div>
-<div id="savedIndicator" style="font-size:0.7rem;color:var(--green);margin-top:6px;display:none;">✅ 已保存</div>
-
-<div class="sec-title">🔖 操作清单</div>
-<div class="note-area" style="margin-top:8px;">
-  <textarea id="checklist" placeholder="待办事项...&#10;&#10;□ 盛和资源清仓（120日生命线已破）&#10;□ 天娱数科清仓（连续两跌停）&#10;□ 埃斯顿清仓（MACD死叉）&#10;□ 昭衍持有观察（主力净流入2亿）&#10;□ 工业富联持有（止损54.70）"></textarea>
-  <div class="note-actions">
-    <button class="btn" onclick="clearChecklist()">清空</button>
-    <button class="btn save" onclick="saveChecklist()">💾 保存</button>
+<div class="hist-modal" id="histModal" onclick="closeHist()">
+  <div class="hist-content" onclick="event.stopPropagation()">
+    <button class="hist-close" onclick="closeHist()">✕</button>
+    <div id="histDetail"></div>
   </div>
 </div>
 
@@ -700,50 +618,21 @@ body {
   <div class="trade-sheet" id="scoreDetail"></div>
 </div>
 
-<!-- ===== TAB: SCORE ===== -->
-<!-- ===== TAB: VERIFICATION ===== -->
-<div class="tab-content" id="tab-verify">
-
-<div class="sec-title">🎯 推荐验证 · 自学习系统</div>
-<div style="font-size:0.7rem;color:var(--dim);margin-bottom:8px;">
-  每日信号推荐 → 次日股价验证 → 规则准确率统计 → 权重自优化
-</div>
-
-<div class="summary" style="grid-template-columns: 1fr 1fr 1fr;" id="verifySummary">
-  <div class="sum-card"><div class="label">总准确率</div><div class="value" id="vAccuracy">—</div><div class="sub" id="vTotal">0条已验证</div></div>
-  <div class="sum-card"><div class="label">今日推荐</div><div class="value" id="vToday">0</div><div class="sub">条待验证</div></div>
-  <div class="sum-card"><div class="label">最优规则</div><div class="value" style="font-size:0.8rem;" id="vBestRule">—</div><div class="sub" id="vBestRate"></div></div>
-</div>
-
-<div class="sec-title">📊 规则准确率排名</div>
-<div id="ruleRanking" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
-
-<div style="display:flex;gap:8px;margin:10px 0;">
-  <button class="btn save" onclick="runVerification()">🔍 验证未决推荐</button>
-  <button class="btn" onclick="optimizeRules()">⚡ 自动优化权重</button>
-  <button class="btn" style="background:var(--red);color:#fff;" onclick="clearSignalLog()">🗑 清空日志</button>
-</div>
-
-<div class="sec-title">📋 推荐记录</div>
-<div id="signalLogList" style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
-<div class="empty-state" id="signalLogEmpty">暂无推荐记录，信号引擎触发后自动记录</div>
-
-</div>
-
-<div class="tab-content" id="tab-score">
-
-<div class="sec-title">🍎 多因子选股评分</div>
-<div style="font-size:0.7rem;color:var(--dim);margin-bottom:8px;">
-  产业链框架 + 基金经理共识 + 博主观点 + 历史涨停验证 → 综合打分
-</div>
-
+<!-- ===== SCORE SECTION INSIDE PORTFOLIO ===== -->
+<div style="margin-top:24px;">
+<div class="sec-title">🍎 持仓评分</div>
 <div class="summary" style="grid-template-columns: 1fr 1fr;">
-  <div class="sum-card"><div class="label">目标基准</div><div class="value" style="font-size:0.9rem;">昭衍新药</div><div class="sub" style="color:var(--gold);">全仓唯一多头排列 目标53-55</div></div>
   <div class="sum-card"><div class="label">评分标的</div><div class="value" style="font-size:0.9rem;" id="scoreCount">0只</div><div class="sub">持仓+关注池</div></div>
+  <div class="sum-card"><div class="label">最强标的</div><div class="value" style="font-size:0.9rem;color:var(--green);">昭衍新药</div><div class="sub">全仓唯一多头排列</div></div>
+</div>
+<div id="scoreRanking"></div>
 </div>
 
-<div class="sec-title">📊 评分排名</div>
-<div id="scoreRanking"></div>
+<!-- Verify + Notes + Ops tabs removed. Clean dashboard v5.0 -->
+
+</div>
+
+<!-- Old score tab merged into portfolio tab -->
 
 <div class="sec-title">🔬 因子说明</div>
 <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:0.7rem;line-height:1.8;">
@@ -1343,46 +1232,22 @@ function resetRules() {
   if (confirm('确定要重置所有规则到默认状态吗？自定义规则将丢失。')) { location.reload(); }
 }
 
-function refreshAll() { renderOps(); renderRules(); }
+function refreshAll() { /* Ops/Rules engine disabled in v5.0 */ }
 
 // ============================================================
 //  TAB SWITCHING
 // ============================================================
-const tabMap = { ops:1, portfolio:2, news:3, brief:4, notes:5, limitup:6, score:7, verify:8 };
+const tabMap = { portfolio:1, news:2, brief:3 };
 let switchTab = function(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelector(`.nav-tab:nth-child(${tabMap[name]})`).classList.add('active');
-  document.getElementById(`tab-${name}`).classList.add('active');
-  if (name === 'ops') refreshAll();
-  if (name === 'limitup') { renderLUBoard(); document.getElementById('luMatchEmpty').style.display = 'block'; }
-  if (name === 'score') { scoreAll(); renderScores(); }
+  const el = document.getElementById(`tab-${name}`);
+  if (el) el.classList.add('active');
+  if (name === 'portfolio') { scoreAll(); renderScores(); }
   if (name === 'news') { if (newsData) renderAllNews(); else loadNews(); }
-  if (name === 'brief') { if (newsData) renderBrief(); }
-  if (name === 'verify') { renderVerification(); }
+  if (name === 'brief') { if (newsData) renderBrief(); renderLUBoard(); }
 };
-
-// ============================================================
-//  NOTES
-// ============================================================
-const noteText = document.getElementById('noteText');
-const checklist = document.getElementById('checklist');
-const savedInd = document.getElementById('savedIndicator');
-noteText.value = localStorage.getItem('dragon_notes') || '';
-checklist.value = localStorage.getItem('dragon_checklist') || '';
-
-function saveNotes() {
-  localStorage.setItem('dragon_notes', noteText.value);
-  savedInd.style.display = 'block';
-  setTimeout(() => savedInd.style.display = 'none', 2000);
-}
-function clearNotes() { noteText.value = ''; localStorage.removeItem('dragon_notes'); }
-function saveChecklist() {
-  localStorage.setItem('dragon_checklist', checklist.value);
-  savedInd.style.display = 'block';
-  setTimeout(() => savedInd.style.display = 'none', 2000);
-}
-function clearChecklist() { checklist.value = ''; localStorage.removeItem('dragon_checklist'); }
 
 // ============================================================
 //  LIMIT-UP ENGINE
@@ -2319,8 +2184,8 @@ function execCmd() {
       case '导入': case 'import':
         importData(); return toast('📥 选择导入文件', 'info');
 
-      case '笔记': case 'notes': case 'n':
-        switchTab('notes'); return toast('📝 已切换到笔记', 'info');
+      case '持仓': case 'pf': case 'p':
+        switchTab('portfolio'); return toast('📊 已切换到持仓', 'info');
 
       case '规则': case 'rule': {
         const action = args[1]; const ruleName = args.slice(2).join(' ');
@@ -2400,18 +2265,14 @@ window.closeTradeModal = closeTradeModal;
 window.onTradeStockChange = onTradeStockChange;
 window.onTradeActionChange = onTradeActionChange;
 window.toggleRule = toggleRule;
-window.addCustomRule = addCustomRule;
-window.resetRules = resetRules;
+// Ops engine removed in v5.0
 window.switchTab = switchTab;
 window.closeHist = closeHist;
 window.filterByCatalyst = filterByCatalyst;
 window.showLUDetail = showLUDetail;
 window.showScoreDetail = showScoreDetail;
 window.closeScoreModal = closeScoreModal;
-window.saveNotes = saveNotes;
-window.clearNotes = clearNotes;
-window.saveChecklist = saveChecklist;
-window.clearChecklist = clearChecklist;
+// Notes functions removed in v5.0
 window.refreshLiveData = refreshLiveData;
 window.runVerification = runVerification;
 window.optimizeRules = optimizeRules;
