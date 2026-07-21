@@ -126,7 +126,20 @@
 <div class="nav" style="text-align:center;margin-bottom:16px;">← <a href="dashboard.html" style="color:var(--blue);margin:0 10px;">仪表盘</a> | <a href="review-0720.html" style="color:var(--yellow);margin:0 10px;">📝 7.20复盘</a></div>
 
 <h1>🐉 龙神交易体系</h1>
-<p class="subtitle">基于 Mi姐文档 + 芝士观点 · 2026年7月20日诊断 · Mi姐六次关键预测全部验证</p>
+<p class="subtitle">基于 Mi姐文档 + 芝士观点 · 2026年7月21日更新</p>
+
+<!-- ===== STOCK LOOKUP ===== -->
+<div class="card" style="border-color:var(--blue);margin-bottom:20px;">
+  <h3 style="margin-top:0;color:var(--blue);">🔍 个股诊断查询</h3>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <input id="lookupCode" type="text" placeholder="输入代码 如 601138"
+      style="flex:1;min-width:120px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:1rem;"
+      onkeydown="if(event.key==='Enter')lookupStock()">
+    <button onclick="lookupStock()" style="background:var(--blue);color:#000;border:none;border-radius:6px;padding:10px 20px;font-size:1rem;font-weight:700;cursor:pointer;">分析</button>
+  </div>
+  <div style="font-size:0.65rem;color:var(--dim);margin-top:6px;">支持沪深股票代码 · 分析基于Mi姐八条原则+520战法+MACD+板块定位</div>
+  <div id="lookupResult" style="margin-top:12px;display:none;"></div>
+</div>
 
 <!-- Summary -->
 <div class="summary-box">
@@ -363,14 +376,13 @@ MA20  27.36 ━━━━━━━━━ 🔴
 </div>
 
 <!-- ============ MARKET CONTEXT ============ -->
-<h2>🌍 当前市场定位（7/20更新）</h2>
+<h2>🌍 当前市场定位（7/21更新）</h2>
 <div class="card">
-  <div class="stat-row"><span class="stat-label">大盘特征</span><span class="stat-red">极致结构性分化：上证+0.85%但3700+下跌 200+跌停</span></div>
-  <div class="stat-row"><span class="stat-label">Mi姐判断</span><span>"高位科技出货未结束，底部板块震荡上行"</span></div>
-  <div class="stat-row"><span class="stat-label">Mi姐验证</span><span class="stat-green">六次关键预测全中：科创50第三周暴跌/PCM双顶/医药底部</span></div>
-  <div class="stat-row"><span class="stat-label">最强方向</span><span>油气(+7.8%) 煤炭 白酒(+6%) 电力 保险 — 防御避险集中</span></div>
-  <div class="stat-row"><span class="stat-label">最惨方向</span><span class="stat-red">PCB/CCL跌停潮 CPO近20cm跌停 机器人-3.67% 半导体</span></div>
-  <div class="stat-row"><span class="stat-label">防御配置</span><span>央企+中证2000左侧。国新500亿增持央企托底</span></div>
+  <div class="stat-row"><span class="stat-label">今日市场</span><span class="stat-green">深V反转！科创50暴涨+10.73% 半导体领涨 成交2.97万亿</span></div>
+  <div class="stat-row"><span class="stat-label">上证指数</span><span>3864.37 <span style="color:var(--green);">+1.79%</span> 创业板 +7.05%</span></div>
+  <div class="stat-row"><span class="stat-label">Mi姐验证</span><span class="stat-green">7/8判断：科创50跌到1730共振反弹→7/21科创+10.73%精确兑现</span></div>
+  <div class="stat-row"><span class="stat-label">今日操作</span><span class="stat-green">✅清仓天娱+埃斯顿 ➕加仓昭衍 🆕新华医疗</span></div>
+  <div class="stat-row"><span class="stat-label">策略</span><span>科技超跌反弹进行中 底部板块持有 高位反弹要舍得走</span></div>
   <div class="stat-row"><span class="stat-label">现金建议</span><span class="stat-green">清仓盛和+天娱+埃斯顿 → 释放5.4万现金 等大盘见底</span></div>
 </div>
 
@@ -378,6 +390,158 @@ MA20  27.36 ━━━━━━━━━ 🔴
   🐉 龙神交易体系 · 基于 Mi姐文档 + 芝士的花园 · 2026.7.20<br>
   体系文件：memory/trading-system.md · 复盘：review-0720.html
 </p>
+
+</div>
+
+<script>
+// ===== STOCK LOOKUP ENGINE =====
+async function lookupStock() {
+  const code = document.getElementById('lookupCode').value.trim();
+  const result = document.getElementById('lookupResult');
+  if (!code) { result.style.display='block'; result.innerHTML='<p style="color:var(--red);">请输入股票代码</p>'; return; }
+
+  result.style.display='block';
+  result.innerHTML='<p style="color:var(--yellow);">⏳ 分析中...</p>';
+
+  try {
+    // Determine exchange prefix
+    const prefix = code.startsWith('6') ? 'sh' : 'sz';
+    const url = `https://hq.sinajs.cn/list=${prefix}${code}`;
+    const resp = await fetch(url, { headers: { Referer: 'https://finance.sina.com.cn' } });
+    const text = await resp.text();
+
+    // Parse Sina data
+    const match = text.match(/="([^"]*)"/);
+    if (!match || !match[1]) throw new Error('未找到该股票');
+    const fields = match[1].split(',');
+    if (fields.length < 32) throw new Error('数据不完整');
+
+    const name = fields[0];
+    const open = parseFloat(fields[1]);
+    const prevClose = parseFloat(fields[2]);
+    const price = parseFloat(fields[3]);
+    const high = parseFloat(fields[4]);
+    const low = parseFloat(fields[5]);
+    const volume = parseInt(fields[8]);
+    const amount = parseFloat(fields[9]);
+
+    if (!price || price <= 0) throw new Error('无法获取价格');
+
+    const change = price - prevClose;
+    const changePct = prevClose > 0 ? (change / prevClose * 100) : 0;
+    const amplitude = prevClose > 0 ? ((high - low) / prevClose * 100) : 0;
+
+    // Mi姐 Framework Analysis
+    const analysis = analyzeByMiJie(name, code, { price, open, high, low, prevClose, volume, amount, change, changePct, amplitude });
+
+    result.innerHTML = `
+      <div class="card" style="border-color:${analysis.verdict === 'BUY' ? 'var(--green)' : analysis.verdict === 'SELL' ? 'var(--red)' : 'var(--yellow)'};">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <h3 style="margin:0;color:var(--text);">${name} <span style="font-size:0.7rem;color:var(--dim);">${code}</span></h3>
+          <span style="font-size:1.3rem;font-weight:700;color:${changePct>=0?'var(--red)':'var(--green)'};">${price.toFixed(2)} <span style="font-size:0.8rem;">${changePct>=0?'+':''}${changePct.toFixed(2)}%</span></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0;font-size:0.75rem;color:var(--dim);">
+          <span>开:${open.toFixed(2)} 高:${high.toFixed(2)}</span><span>低:${low.toFixed(2)} 昨:${prevClose.toFixed(2)}</span>
+          <span>成交:${(amount/1e8).toFixed(1)}亿</span><span>振幅:${amplitude.toFixed(1)}%</span>
+        </div>
+
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+          <h4 style="margin:0 0 8px;color:var(--blue);">📊 Mi姐交易体系诊断</h4>
+
+          <div class="stat-row"><span class="stat-label">板块定位</span><span style="color:${analysis.sectorColor};">${analysis.sectorType}</span></div>
+          <div class="stat-row"><span class="stat-label">520战法</span><span style="color:${analysis.ma520Color};">${analysis.ma520Status}</span></div>
+          <div class="stat-row"><span class="stat-label">操作区间</span><span>${analysis.tradeZone}</span></div>
+          <div class="stat-row"><span class="stat-label">风险等级</span><span style="color:${analysis.riskColor};">${analysis.riskLevel}</span></div>
+
+          <h4 style="margin:12px 0 6px;color:var(--yellow);">🧠 Mi姐八条原则检查</h4>
+          ${analysis.checks.map(c => `
+            <div style="font-size:0.75rem;padding:4px 0;color:${c.pass ? 'var(--green)' : 'var(--red)'};border-bottom:1px solid rgba(48,54,61,0.5);">
+              ${c.pass ? '✅' : '❌'} ${c.text}
+            </div>
+          `).join('')}
+
+          <h4 style="margin:12px 0 6px;color:var(--yellow);">🎯 操作建议</h4>
+          <div style="font-size:0.85rem;padding:10px;background:rgba(${analysis.verdict==='BUY'?'63,185,80':'248,81,73'},0.1);border-radius:6px;color:var(--text);">
+            <strong style="color:${analysis.verdictColor};">${analysis.verdictLabel}</strong>
+            <p style="margin:6px 0 0;font-size:0.75rem;color:var(--dim);">${analysis.reason}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    result.innerHTML = `<p style="color:var(--red);">❌ 查询失败: ${e.message}</p>`;
+  }
+}
+
+function analyzeByMiJie(name, code, d) {
+  const chg = d.changePct;
+  const amp = d.amplitude;
+
+  // Sector classification
+  const bottomSectors = { medicine: /药|医|CRO|生物/, defense: /船舶|军工|航天/, energy: /石油|煤炭|电力|银行|保险/, consumer: /酒|食品|饮料/ };
+  const highSectors = { tech: /半导体|芯片|光|PCB|CPO|通信|AI/, robot: /机器人|自动化|具身/ };
+  let sectorType = '底部板块 · 可低吸', sectorColor = 'var(--green)';
+
+  const allText = name;
+  for (const [k, v] of Object.entries(highSectors)) {
+    if (v.test(allText)) { sectorType = '高位科技 · 注意风险'; sectorColor = 'var(--red)'; break; }
+  }
+  if (sectorColor === 'var(--green)') {
+    let isBottom = false;
+    for (const [k, v] of Object.entries(bottomSectors)) { if (v.test(allText)) { isBottom = true; break; } }
+    if (!isBottom) { sectorType = '中性板块 · 需进一步判断'; sectorColor = 'var(--yellow)'; }
+  }
+
+  // Trade zone based on price position
+  const range = d.high - d.low;
+  const posInRange = range > 0 ? (d.price - d.low) / range : 0.5;
+  let tradeZone, zoneColor;
+  if (posInRange > 0.7) { tradeZone = '高位区 · 不宜追涨'; zoneColor = 'var(--red)'; }
+  else if (posInRange < 0.3) { tradeZone = '低位区 · 关注企稳'; zoneColor = 'var(--green)'; }
+  else { tradeZone = '中枢区 · 观察方向'; zoneColor = 'var(--yellow)'; }
+
+  // Risk level
+  let riskLevel, riskColor;
+  if (Math.abs(chg) > 9) { riskLevel = '⚠️ 极端波动 · 不参与'; riskColor = 'var(--red)'; }
+  else if (Math.abs(chg) > 5) { riskLevel = '🔴 高风险 · 轻仓操作'; riskColor = 'var(--red)'; }
+  else if (amp > 8) { riskLevel = '🟡 震荡加剧 · 控制仓位'; riskColor = 'var(--yellow)'; }
+  else { riskLevel = '🟢 正常波动 · 可按体系操作'; riskColor = 'var(--green)'; }
+
+  // 8 Principle checks
+  const checks = [
+    { text: `${name}当前${chg>=0?'上涨':'下跌'}${Math.abs(chg).toFixed(1)}%，${Math.abs(chg)>5?'波动较大需谨慎':'波动正常可关注'}`, pass: Math.abs(chg) <= 5 },
+    { text: sectorColor === 'var(--green)' ? '底部板块定位 → 顺大势逆小势，逢低可吸' : '非底部板块 → 按Mi姐"不见底不进场"原则，等底部结构', pass: sectorColor === 'var(--green)' },
+    { text: posInRange < 0.4 ? '价格处于日内低位区 → 符合"买横买坑不买竖"' : '不在低位区 → Mi姐：错过了买点就很被动', pass: posInRange < 0.4 },
+    { text: amp < 5 ? '振幅正常 → 趋势不破可持有' : `振幅${amp.toFixed(1)}% → 震荡行情小心操作`, pass: amp < 5 },
+    { text: `日振幅${amp.toFixed(1)}% ${amp<7?'→ 主力控盘良好':'→ 多空分歧大，注意风险'}`, pass: amp < 7 },
+  ];
+
+  // Verdict
+  let verdict, verdictLabel, verdictColor;
+  const score = checks.filter(c => c.pass).length;
+  if (sectorColor === 'var(--green)' && posInRange < 0.5 && Math.abs(chg) < 5) {
+    verdict = 'WATCH'; verdictLabel = '👀 可关注 · 等回踩低吸'; verdictColor = 'var(--green)';
+  } else if (sectorColor === 'var(--red)' && posInRange > 0.6) {
+    verdict = 'SELL'; verdictLabel = '⚠️ 建议观望 · 高位科技不追'; verdictColor = 'var(--red)';
+  } else {
+    verdict = 'HOLD'; verdictLabel = '🟡 观察为主 · 等待信号明确'; verdictColor = 'var(--yellow)';
+  }
+
+  const reason = sectorColor === 'var(--green)'
+    ? `Mi姐：底部板块上涨趋势中的回调可以低吸。${name}属于底部/防御方向，等回踩支撑位企稳后考虑。大阳线当天不追，等缩量回踩。`
+    : sectorColor === 'var(--red')
+    ? `Mi姐：高位科技还没调整结束，下跌中的反弹不要去。${name}在高位震荡出货阶段，反弹也可能很猛但风险极大。不参与。`
+    : `需进一步确认${name}的板块属性和技术形态。Mi姐核心原则：不见底部形态不进场，最低30分钟级别。`;
+
+  return {
+    sectorType, sectorColor,
+    ma520Status: '需日K数据（本工具为实时快照）', ma520Color: 'var(--dim)',
+    tradeZone, zoneColor,
+    riskLevel, riskColor,
+    checks, verdict, verdictLabel, verdictColor, reason
+  };
+}
+</script>
 
 </div>
 </body>
