@@ -864,6 +864,9 @@ function updateSummaryCards() {
   }
 }
 
+let fullRefreshTimer = null;
+let lastFullRefresh = null;
+
 function startPolling() {
   refreshLiveData();
   function scheduleNext() {
@@ -878,6 +881,36 @@ function startPolling() {
     }, interval);
   }
   scheduleNext();
+
+  // Full content refresh every 5 minutes during trading
+  function scheduleFullRefresh() {
+    const ms = getMarketStatus();
+    const interval = (ms === 'online' || ms === 'pre' || ms === 'lunch') ? 300000 : 1800000;
+    fullRefreshTimer = setTimeout(() => {
+      runFullRefresh();
+      scheduleFullRefresh();
+    }, interval);
+  }
+  scheduleFullRefresh();
+}
+
+async function runFullRefresh() {
+  const tab = document.querySelector('.tab-content.active');
+  const tabId = tab ? tab.id : '';
+  try {
+    // Reload news data
+    const resp = await fetch(`/data/news.json?_=${Date.now()}`, { signal: AbortSignal.timeout(8000) });
+    if (resp.ok) {
+      newsData = await resp.json();
+      if (tabId === 'tab-news') renderAllNews();
+      if (tabId === 'tab-brief') { renderBrief(); renderLUBoard(); }
+    }
+  } catch(e) { /* silent fail */ }
+  // Refresh scores and LU
+  try { scoreAll(); if (tabId === 'tab-portfolio') renderScores(); } catch(e) {}
+  try { renderLUBoard(); } catch(e) {}
+  lastFullRefresh = new Date();
+  updateTimestamp();
 }
 
 // ============================================================
