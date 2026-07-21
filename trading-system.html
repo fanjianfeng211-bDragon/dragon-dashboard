@@ -133,8 +133,7 @@
   <h3 style="margin-top:0;color:var(--blue);">🔍 个股诊断查询</h3>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
     <input id="lookupCode" type="text" placeholder="输入代码 如 601138"
-      style="flex:1;min-width:120px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:1rem;"
-      onkeydown="if(event.key==='Enter')lookupStock()">
+      style="flex:1;min-width:120px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:1rem;">
     <button onclick="lookupStock()" style="background:var(--blue);color:#000;border:none;border-radius:6px;padding:10px 20px;font-size:1rem;font-weight:700;cursor:pointer;">分析</button>
   </div>
   <div style="font-size:0.65rem;color:var(--dim);margin-top:6px;">支持沪深股票代码 · 分析基于Mi姐八条原则+520战法+MACD+板块定位</div>
@@ -167,7 +166,7 @@
     <div class="stat-row"><span class="stat-label">核心战法</span><span>龙头战法 + 情绪周期</span></div>
     <div class="stat-row"><span class="stat-label">买入信号</span><span>板块最强+龙头确认+换手充分</span></div>
     <div class="stat-row"><span class="stat-label">止损铁律</span><span>破5日线减仓，破位即走</span></div>
-    <div class="stat-row"><span class="stat-label">当前持仓</span><span>昭衍/工业富联/盛和/埃斯顿/天娱数科</span></div>
+    <div class="stat-row"><span class="stat-label">当前持仓</span><span>昭衍/工业富联/盛和/新华医疗/科创半导体</span></div>
   </div>
   <div class="card">
     <h3>🏛️ 基金层（14万）</h3>
@@ -250,10 +249,10 @@
   </div>
   <div class="grid2">
     <div>
-      <div class="stat-row"><span class="stat-label">成本/现价</span><span>51.269 → <span class="stat-red">47.000</span> (-8.38%)</span></div>
-      <div class="stat-row"><span class="stat-label">市值/仓位</span><span>51,700 / 30%</span></div>
-      <div class="stat-row"><span class="stat-label">逻辑</span><span>CRO猴模块龙头。主力净流入2.02亿！</span></div>
-      <div class="stat-row"><span class="stat-label">今日走势</span><span class="stat-green">跌停开盘→逆转！43.14→47.00</span></div>
+      <div class="stat-row"><span class="stat-label">成本/现价</span><span>50.688 → <span class="stat-red">49.12</span> (-3.15%)</span></div>
+      <div class="stat-row"><span class="stat-label">市值/仓位</span><span>68,768 / 36% ➕加仓300股</span></div>
+      <div class="stat-row"><span class="stat-label">逻辑</span><span>CRO猴模块龙头。主力跌停板吃货后连续反弹</span></div>
+      <div class="stat-row"><span class="stat-label">今日走势</span><span class="stat-green">+4.51% 深V反弹 加仓至1400股</span></div>
       <div class="stat-row"><span class="stat-label">520战法</span><span class="stat-green">🟢 MA5>MA10>MA20 全仓唯一多头</span></div>
       <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-green">🟢 零上金叉</span></div>
       <div class="stat-row"><span class="stat-label">形态判断</span><span class="stat-green">教科书级突破回踩确认！</span></div>
@@ -272,64 +271,57 @@ MA20  41.38 ━━━━━━━━ 🟢 趋势生命线</div>
 
 <div class="grid2">
 
-  <!-- 埃斯顿 -->
-  <div class="card">
-    <div class="card-header"><span class="name">埃斯顿 <span class="code">002747</span></span><span class="badge badge-red">🔴 明天清仓</span></div>
-    <div class="stat-row"><span class="stat-label">成本/现价</span><span>39.020 → <span class="stat-red">34.370</span> (-12.0%)</span></div>
-    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>17,185 / 10%</span></div>
-    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-red">跌停 -10% 开盘即封板</span></div>
-    <div class="stat-row"><span class="stat-label">MACD</span><span class="stat-red">🔴 零上死叉确认！</span></div>
-    <div class="stat-row"><span class="stat-label">Mi姐原话7/16</span><span class="stat-red">"机器人不能抄"</span></div>
-    <div class="stat-row"><span class="stat-label">⚠️ 操作</span><span class="stat-red">止损36.50已破 明天清仓 Mi姐：MACD死叉=最强卖出</span></div>
+  <!-- 埃斯顿 002747 ✅ 7/21已清仓 -->
+  <div class="card" style="opacity:0.6;">
+    <div class="card-header"><span class="name">✅ 埃斯顿 <span class="code">002747</span> — 已清仓</span><span class="badge badge-green">纪律执行</span></div>
+    <div class="stat-row"><span class="stat-label">结果</span><span>MACD死叉后清仓 -12% Mi姐："机器人不能抄"提前4天预警</span></div>
   </div>
 
   <!-- 工业富联 -->
   <div class="card">
-    <div class="card-header"><span class="name">工业富联 <span class="code">601138</span></span><span class="badge badge-yellow">🟡 观察</span></div>
-    <div class="stat-row"><span class="stat-label">成本/现价</span><span>65.311 → <span class="stat-red">56.500</span> (-13.55%)</span></div>
-    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>28,250 / 16%</span></div>
-    <div class="stat-row"><span class="stat-label">今日</span><span>算力全线崩盘中仅-1.89% 抗跌</span></div>
-    <div class="stat-row"><span class="stat-label">逻辑</span><span>中金看好Rubin机柜。半年报预增93-101%</span></div>
-    <div class="stat-row"><span class="stat-label">盈亏比</span><span class="stat-green">风险5% / 回报15% = 3:1</span></div>
+    <div class="card-header"><span class="name">工业富联 <span class="code">601138</span></span><span class="badge badge-green">🟢 反弹中</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>65.311 → <span class="stat-red">60.98</span> (-6.69%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>30,490 / 16%</span></div>
+    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-green">+7.93%大涨！主力净流入11.02亿 科技反攻</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>中金看好Rubin机柜。半年报预增93-101%。算力龙头</span></div>
     <div class="stat-row"><span class="stat-label">🎯 目标/止损</span><span class="stat-green">66</span> / <span class="stat-red">54.70</span></div>
-    <div class="stat-row"><span class="stat-label">⚠️ 操作</span><span class="stat-yellow">持有观察 不破54.70不走 反弹到MA20附近减仓</span></div>
   </div>
 
-  <!-- 天娱数科 -->
+  <!-- 天娱数科 002354 ✅ 7/21已清仓 -->
+  <div class="card" style="opacity:0.6;">
+    <div class="card-header"><span class="name">✅ 天娱数科 <span class="code">002354</span> — 已清仓</span><span class="badge badge-green">纪律执行</span></div>
+    <div class="stat-row"><span class="stat-label">结果</span><span>两个跌停后清仓 -19.2%</span></div>
+  </div>
+
+  <!-- 盛和资源 600392 — 未清仓 反弹 -->
+  <div class="card" style="border-color:var(--yellow);">
+    <div class="card-header"><span class="name">盛和资源 <span class="code">600392</span></span><span class="badge badge-yellow">🟡 反弹持有</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>46.874 → <span class="stat-red">21.43</span> (-54.3%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>23,573 / 12%</span></div>
+    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-green">+8.18%反弹！主力+8961万</span></div>
+    <div class="stat-row"><span class="stat-label">操作</span><span class="stat-yellow">未清仓等回血 阻力24附近 反弹减仓</span></div>
+  </div>
+
+  <!-- 新华医疗 600587 🆕 -->
+  <div class="card" style="border-color:var(--blue);">
+    <div class="card-header"><span class="name">🆕 新华医疗 <span class="code">600587</span></span><span class="badge badge-blue">新仓</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>13.245 → <span class="stat-red">12.96</span> (-2.23%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>14,256 / 7%</span></div>
+    <div class="stat-row"><span class="stat-label">逻辑</span><span>医疗器械底部 Mi姐：医药医疗是底部板块</span></div>
+  </div>
+
+  <!-- 科创半导体ETF 588170 🆕 -->
   <div class="card">
-    <div class="card-header"><span class="name">天娱数科 <span class="code">002354</span></span><span class="badge badge-red">🔴 明天清仓</span></div>
-    <div class="stat-row"><span class="stat-label">成本/现价</span><span>7.964 → <span class="stat-red">6.440</span> (-19.2%)</span></div>
-    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>15,456 / 9%</span></div>
-    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-red">连续第二个跌停！13:19封板</span></div>
-    <div class="stat-row"><span class="stat-label">Mi姐理论</span><span class="stat-red">破位即走不补仓 两个跌停=无人接盘</span></div>
-    <div class="stat-row"><span class="stat-label">⚠️ 操作</span><span class="stat-red">止损6.80已破 明天开盘清仓</span></div>
+    <div class="card-header"><span class="name">科创半导体ETF <span class="code">588170</span></span><span class="badge badge-purple">试仓</span></div>
+    <div class="stat-row"><span class="stat-label">成本/现价</span><span>1.086 → <span class="stat-red">1.07</span> (-6.03%)</span></div>
+    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>107 / 0%</span></div>
+    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-green">科创50暴涨+10.73% 试仓博反弹</span></div>
   </div>
 
-  <!-- 盛和资源 -->
-  <div class="card" style="border-color:var(--red);">
-    <div class="card-header"><span class="name">🚨 盛和资源 <span class="code">600392</span></span><span class="badge badge-red">明天必须清仓</span></div>
-    <div class="stat-row"><span class="stat-label">成本/现价</span><span>46.874 → <span class="stat-red">19.810</span> (-57.77%)</span></div>
-    <div class="stat-row"><span class="stat-label">市值/仓位</span><span>21,791 / 13%</span></div>
-    <div class="stat-row"><span class="stat-label">今日</span><span class="stat-red">最低19.31 击穿120日生命线20.90！半年新低</span></div>
-    <div class="stat-row"><span class="stat-label">形态</span><span class="stat-red">六连阴 加速下跌 MACD零下发散</span></div>
-    <div class="stat-row"><span class="stat-label">Mi姐纪律</span><span class="stat-red">跌破120日生命线=无条件清仓 下跌不言底</span></div>
-    <div class="mini-chart">筹码峰 31.66 ━━━━━━━━━ 🔴 主力出货区
-MA20  27.36 ━━━━━━━━━ 🔴
-━━ 现价 19.81 ━━━━━ ⚔️
-120日低 20.90 ━━━━━━━━ 🚨 生命线已破!
-20日低 21.05 ━━━━━━ 🟢
-120低 20.90 ━━━━━ 🚨 最后防线！
-下方无底 ⬇️</div>
-    <div class="stat-row"><span class="stat-label">🎯 中报反弹</span><span class="stat-green">23-24</span></div>
-    <div class="stat-row"><span class="stat-label">🚨 生命线</span><span class="stat-red">20.90！跌破=半年新低</span></div>
-    <div class="stat-row"><span class="stat-label">纪律</span><span>中报出来不管好坏都走</span></div>
-  </div>
-
-  <!-- 科创50 — 已按计划清仓 -->
-  <div class="card" style="border-color:var(--green); opacity:0.85;">
+  <!-- 科创50 588000 ✅ 已按计划清仓 -->
+  <div class="card" style="opacity:0.6;">
     <div class="card-header"><span class="name">✅ 科创50 <span class="code">588000</span> — 已清仓</span><span class="badge badge-green">纪律执行</span></div>
-    <div class="stat-row"><span class="stat-label">执行</span><span class="stat-green">按7/17计划周一清仓，不管盈亏 ✅</span></div>
-    <div class="stat-row"><span class="stat-label">教训</span><span>Mi姐7/8警告双顶+死猫跳。科创50从2127跌到1718(-19%)</span></div>
+    <div class="stat-row"><span class="stat-label">教训</span><span>Mi姐7/8警告双顶。科创50从2127跌到1718(-19%)后暴涨+10.73%</span></div>
   </div>
 </div>
 
@@ -395,7 +387,8 @@ MA20  27.36 ━━━━━━━━━ 🔴
 
 <script>
 // ===== STOCK LOOKUP ENGINE =====
-async function lookupStock() {
+function lookupStock() {
+  console.log('lookupStock called');
   const code = document.getElementById('lookupCode').value.trim();
   const result = document.getElementById('lookupResult');
   if (!code) { result.style.display='block'; result.innerHTML='<p style="color:var(--red);">请输入股票代码</p>'; return; }
@@ -539,6 +532,12 @@ function analyzeByMiJie(name, code, d) {
     checks, verdict, verdictLabel, verdictColor, reason
   };
 }
+
+// Init event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('lookupCode');
+  if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') lookupStock(); });
+});
 </script>
 
 </div>
