@@ -405,9 +405,7 @@ async function lookupStock() {
 
   try {
     // Determine exchange prefix
-    const prefix = code.startsWith('6') ? 'sh' : 'sz';
-    const url = `https://hq.sinajs.cn/list=${prefix}${code}`;
-    const resp = await fetch(url, { headers: { Referer: 'https://finance.sina.com.cn' } });
+    const resp = await fetch(`/api/stock-lookup?code=${code}`);
     const text = await resp.text();
 
     // Parse Sina data
